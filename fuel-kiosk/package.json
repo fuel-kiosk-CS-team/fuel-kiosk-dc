@@ -8,7 +8,7 @@
     "test:watch": "jest --watch",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npx serve@latest out",
     "lint": "next lint",
     "cy:open": "cypress open",
     "cy:run": "cypress run"
