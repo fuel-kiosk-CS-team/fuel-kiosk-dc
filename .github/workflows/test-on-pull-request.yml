@@ -1,0 +1,9 @@
+name: Test Fuel Kiosk Web Application on Pull Request
+on:
+    pull_request:
+        branches: [ main ]
+jobs:
+    build-and-test:
+        uses: ./.github/workflows/build-and-test.yml
+        with:
+            upload-pages-artifact: false

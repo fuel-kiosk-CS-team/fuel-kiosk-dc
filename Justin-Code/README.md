@@ -1,0 +1,2 @@
+# About
+This repository contains the original code for the Fuel Kiosk Data Application before it was updated as part of a capstone project. The application was originally developed and deployed using ColdFusion, a significantly different tech stack compared to the modernized version. While the updated application retains similar functionality, most changes focus on improvements to the UI and security, with only minor functional differences from this original version.
