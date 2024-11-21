@@ -15,7 +15,7 @@ describe('LeadGrid Integration', () => {
   it('handles Mantine theming correctly', () => {
     render(
       <MantineProvider theme={{ colorScheme: 'dark' }}>
-        <LeadGrid primaryContent={<div>Dark Mode Content</div>} />
+        <LeadGrid secondaryBottomLeftContent={<div>Dark Mode Content</div>} />
       </MantineProvider>
     );
     expect(screen.getByText('Dark Mode Content')).toBeInTheDocument();

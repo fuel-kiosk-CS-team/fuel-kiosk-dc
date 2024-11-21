@@ -44,6 +44,8 @@ export function Login(){
     const handleSubmit = (event) => {
         event.preventDefault();
 
+        
+    
         // Validate basic requirements of password and selection
         if(!selectedSite){
             alert("Please select a fuel site!");
@@ -54,10 +56,9 @@ export function Login(){
             alert("Please enter a password!");
             return;
         }
-
-        console.log("Logging in...")
+        const selectedFuelSite = siteData.find(site => site.value === selectedSite).label
+        console.log(`Logging in with credentials: ${(selectedFuelSite , password)}`)
     }
-
 
     return (
         <form
