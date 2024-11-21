@@ -2,8 +2,8 @@
 
 import { NextResponse } from 'next/server';
 
-// Explicitly mark this route as dynamic
-export const dynamic = 'force-dynamic';
+// Enable revalidation for static output
+export const revalidate = 60; // Revalidate every 60 seconds
 
 export async function GET() {
     const fuelSites = [
