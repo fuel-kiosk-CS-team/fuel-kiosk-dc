@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@mantine/core": "^7.14.1",
+    "@mantine/dates": "^7.14.1",
     "@mantine/hooks": "^7.14.1",
     "@next/bundle-analyzer": "^15.0.3",
     "@tabler/icons-react": "^3.22.0",
