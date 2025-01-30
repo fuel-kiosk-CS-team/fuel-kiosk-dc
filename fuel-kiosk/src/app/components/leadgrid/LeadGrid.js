@@ -2,16 +2,16 @@ import { Container, Grid, SimpleGrid, Skeleton } from '@mantine/core';
 
 const PRIMARY_COL_HEIGHT = '300px';
 
-export function LeadGrid({ 
-  primaryContent, 
-  secondaryTopContent, 
-  secondaryBottomLeftContent, 
-  secondaryBottomRightContent 
+export function LeadGrid({
+  primaryContent,
+  secondaryTopContent,
+  secondaryBottomLeftContent,
+  secondaryBottomRightContent
 }) {
   const SECONDARY_COL_HEIGHT = `calc(${PRIMARY_COL_HEIGHT} / 2 - var(--mantine-spacing-md) / 2)`;
 
   return (
-    <Container my="md" >
+    <Container my="md" fluid >
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">
         {/* Primary Column */}
         <div style={{ height: PRIMARY_COL_HEIGHT }}>

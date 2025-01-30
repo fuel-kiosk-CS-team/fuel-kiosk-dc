@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect} from 'react';
 import { PasswordInput, Select, Button } from '@mantine/core';
 // import TooltipFocus from '../components/form/TooltipFocus.js';
@@ -11,19 +12,20 @@ export function Login(){
     const [siteData, setSiteData] = useState([]);
     const [selectedSite, setSelectedSite] = useState(null);
 
+    const router = useRouter();
+
     // Temporary example of how we can get site data - currently using localStorage (likely to be removed or changed soon) or an API call
     useEffect(() => {
-        // Function to load data
         const loadData = async () => {
             const localData = localStorage.getItem('siteData');
-            
+
             if (localData) {
                 // Parse and use local data if available
                 setSiteData(JSON.parse(localData));
             } else {
                 // Otherwise, fetch from the server
                 try {
-                    const response = await fetch('/api/sites'); // Replace with actual API endpoint (eventually)
+                    const response = await fetch('/api/sites');
                     if (response.ok) {
                         const data = await response.json();
                         setSiteData(data);
@@ -44,8 +46,6 @@ export function Login(){
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        
-    
         // Validate basic requirements of password and selection
         if(!selectedSite){
             alert("Please select a fuel site!");
@@ -56,17 +56,20 @@ export function Login(){
             alert("Please enter a password!");
             return;
         }
-        const selectedFuelSite = siteData.find(site => site.value === selectedSite).label
-        console.log(`Logging in with credentials: ${(selectedFuelSite , password)}`)
+
+        const selectedFuelSite = siteData.find(site => site.value === selectedSite)
+        if (selectedFuelSite.route) {
+            router.push(selectedFuelSite.route)
+        }
     }
 
     return (
         <form
             onSubmit={handleSubmit}
-            
+
         >
             {/* Bulk Fuel Site Selection */}
-            <Select 
+            <Select
                 label="Bulk Fuel Site"
                 placeholder="Select:"
                 data={siteData}
@@ -81,8 +84,8 @@ export function Login(){
                 value={password}
                 onChange={(event) => setPassword(event.currentTarget.value)}
             />
-            <Button 
-                type="submit" 
+            <Button
+                type="submit"
                 mt="md"
                 variant="gradient"
                 gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
@@ -92,5 +95,3 @@ export function Login(){
         </form>
     )
 }
-
-// export default Login; 
