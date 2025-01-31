@@ -10,7 +10,6 @@ export default function Admin() {
                 <NavbarSimple />
             </aside>
             <main className={classes.mainContent}>
-                {/* Add your main admin page content here */}
                 <h1>Welcome to the Admin Panel</h1>
                 <p>Lorem ipsum odor amet, consectetuer adipiscing elit. Volutpat torquent maximus platea tincidunt aliquam inceptos curabitur donec. Eget faucibus congue hendrerit eros enim sit vel. Pellentesque dui lectus vulputate phasellus mollis faucibus, amet pellentesque. Mauris parturient dolor quisque orci volutpat sem laoreet. Quis orci ornare cubilia amet nec. Tristique porttitor dictum in vivamus placerat integer ac. Viverra sed faucibus leo dignissim, amet tincidunt cursus viverra. Nunc porttitor ex laoreet sem molestie platea varius enim fringilla.
 

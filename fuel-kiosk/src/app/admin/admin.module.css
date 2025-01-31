@@ -6,10 +6,10 @@
 }
 
 .sidebar {
-    padding: 0.5rem;
+    padding-right: 0.5rem;
 }
 
 .mainContent {
-    padding: 3rem;
+    padding: 2rem;
     overflow-y: auto; /* Enables scrolling if content overflows */
 }
