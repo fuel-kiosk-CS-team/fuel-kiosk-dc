@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { TextInput, Select, Button, Switch, NumberInput, Group, Paper, Title } from '@mantine/core';
 import {DateInput} from "@mantine/dates"
 
+
+// TODO:
+// input form should just leave the date/datetime to server once it's submitted.
+
 const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
   const [editable, setEditable] = useState(false);
   const [formData, setFormData] = useState({

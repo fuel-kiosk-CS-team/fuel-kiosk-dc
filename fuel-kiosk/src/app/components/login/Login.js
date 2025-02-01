@@ -43,6 +43,10 @@ export function Login(){
 
 
     // Temporary handle function for submitting login information - basic checks
+    // I think we're going to want this to validate the login information is correct
+    // so basically authenticate, then we'll just use the selectedFuelSite val to navigate to input-form ?
+    // This way we can reduce the hydration errors.
+    // Also think input form should just leave the date/datetime to server once it's submitted.
     const handleSubmit = (event) => {
         event.preventDefault();
 
