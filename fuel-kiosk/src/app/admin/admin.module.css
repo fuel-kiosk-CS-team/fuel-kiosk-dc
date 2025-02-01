@@ -1,0 +1,15 @@
+.container {
+    display: grid;
+    grid-template-columns: 20dvw 1fr; /* Sidebar takes 250px, the rest takes remaining space */
+    height: 100vh; /* Full height of the viewport */
+    width: 100vw;
+}
+
+.sidebar {
+    padding-right: 0.5rem;
+}
+
+.mainContent {
+    padding: 2rem;
+    overflow-y: auto; /* Enables scrolling if content overflows */
+}
