@@ -1,24 +1,18 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { LeadGrid } from "./components/LeadGrid";
+import { LeadGrid } from "./components/leadgrid/LeadGrid";
 import { Login } from "./components/login/Login";
 
-export default function Home() {
-  const router = useRouter();
+import classes from "./app.module.css";
 
-  return (
-    <div >
-      <main>
-      <LeadGrid
-        primaryContent={<Login/>}
-        // secondaryTopContent={}
-        // secondaryBottomLeftContent={}
-        // secondaryBottomRightContent={}
-      />
-      
-      </main>
-      
-    </div>
-  );
+export default function Home() {
+    return (
+        <div>
+            <main className={classes.main}>
+                <LeadGrid
+                    primaryContent={<Login/>}
+                />
+            </main>
+        </div>
+    );
 }

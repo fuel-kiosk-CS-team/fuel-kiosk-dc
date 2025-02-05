@@ -7,7 +7,7 @@ export const revalidate = 60; // Revalidate every 60 seconds
 
 export async function GET() {
     const fuelSites = [
-        { value: 'site-1', label: 'ADMIN--FUEL SITE ADMINISTRATOR' },
+        { value: 'site-1', label: 'ADMIN--FUEL SITE ADMINISTRATOR', route: '/admin'},
         { value: 'site-2', label: 'CBARC-M--COLUMBIA BASIN AG RESEARCH-MOR' },
         { value: 'site-3', label: 'CBARC-P--COLUMBIA BASIN AG RESEARCH-PEN' },
         { value: 'site-4', label: 'COAREC--CENTRAL OREGON AG RES EXT' },

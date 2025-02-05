@@ -1,22 +1,7 @@
 name: Deploy Fuel Kiosk Web Application
-on: 
+on:
     push:
         branches: [ main ]
-jobs: 
+jobs:
     build-and-test:
         uses: ./.github/workflows/build-and-test.yml
-        with:
-            upload-pages-artifact: true
-    deploy-to-pages:
-        runs-on: ubuntu-latest
-        needs: build-and-test
-        permissions:
-            pages: write
-            id-token: write
-        environment:
-            name: github-pages
-            url: ${{ steps.deployment.outputs.page_url }}
-        steps:
-            - uses: actions/configure-pages@v3
-            - uses: actions/deploy-pages@v2
-              id: deployment

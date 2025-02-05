@@ -1,7 +1,13 @@
 import { render, screen } from '../../../../test-utils';
-import { fireEvent, waitFor} from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { Login } from './Login';
-import { MantineProvider } from '@mantine/core';
+
+jest.mock("next/navigation", () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+        prefetch: jest.fn(),
+    }),
+}));
 
 describe('Login Component', () => {
     const fuelSitesMock = [

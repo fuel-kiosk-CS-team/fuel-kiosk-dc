@@ -1,0 +1,9 @@
+services:
+  db:
+    image: "mysql"
+    restart: "always"
+    environment:
+      MYSQL_DATABASE: "fuel-kiosk"
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - "3306:3306"
