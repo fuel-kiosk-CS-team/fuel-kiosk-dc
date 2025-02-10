@@ -1,0 +1,71 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--mantine-spacing-md, 1rem);
+    padding: var(--mantine-spacing-md, 1rem);
+  }
+  
+  .fieldGroup {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--mantine-spacing-md, 1rem);
+    width: 100%;
+  }
+  
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mantine-spacing-xs, 0.5rem);
+    width: 100%;
+  }
+  
+  .label {
+    font-size: 1.125rem;
+    font-weight: 500;
+    text-align: left;
+  }
+  
+  .input,
+  .select {
+    width: 100%;
+    padding: var(--mantine-spacing-sm, 0.75rem);
+    background-color: var(--mantine-color-dark, #2d2d2d);
+    color: var(--mantine-color-white, #ffffff);
+    border: none;
+    border-radius: var(--mantine-radius-sm, 0.375rem);
+    text-align: left;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    gap: var(--mantine-spacing-md, 1rem);
+    padding-top: var(--mantine-spacing-md, 1rem);
+    justify-content: flex-start;
+  }
+  
+  .submitButton {
+    padding: var(--mantine-spacing-sm, 0.75rem) var(--mantine-spacing-md, 1rem);
+    background-color: var(--mantine-color-blue, #3b82f6);
+    color: var(--mantine-color-white, #ffffff);
+    border: none;
+    border-radius: var(--mantine-radius-sm, 0.375rem);
+    cursor: pointer;
+  }
+  
+  .submitButton:hover {
+    background-color: var(--mantine-color-blue-dark, #2563eb);
+  }
+  
+  .resetButton {
+    padding: var(--mantine-spacing-sm, 0.75rem) var(--mantine-spacing-md, 1rem);
+    background-color: var(--mantine-color-gray-6, #4a5568);
+    color: var(--mantine-color-white, #ffffff);
+    border: none;
+    border-radius: var(--mantine-radius-sm, 0.375rem);
+    cursor: pointer;
+  }
+  
+  .resetButton:hover {
+    background-color: var(--mantine-color-gray-7, #2d3748);
+  }
