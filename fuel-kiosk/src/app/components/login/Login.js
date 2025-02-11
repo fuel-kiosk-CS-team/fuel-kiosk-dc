@@ -57,10 +57,14 @@ export function Login(){
             return;
         }
 
-        const selectedFuelSite = siteData.find(site => site.value === selectedSite)
-        if (selectedFuelSite.route) {
-            router.push(selectedFuelSite.route)
+        const selectedFuelSite = siteData.find(site => site.value === selectedSite);
+        if (!selectedFuelSite) {
+          alert("Selected fuel site not found!");
+          return;
         }
+      
+        const route = selectedFuelSite.route || `/sites/${selectedFuelSite.value}`;
+        router.push(route);
     }
 
     return (
