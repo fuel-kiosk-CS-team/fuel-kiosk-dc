@@ -1,8 +1,8 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma from "@/lib/prisma"; // Ensure this points to your Prisma instance
-import { compare } from "bcryptjs"; // If hashing passwords
+// import NextAuth from "next-auth";
+// import CredentialsProvider from "next-auth/providers/credentials";
+// import { PrismaAdapter } from "@next-auth/prisma-adapter";
+// import prisma from "@/lib/prisma"; // Ensure this points to your Prisma instance
+// import { compare } from "bcryptjs"; // If hashing passwords
 
 /*
 Basic Setup for Authentication, unsure as to whether we will do this for sure, but it's a good baseline.
@@ -78,50 +78,50 @@ Environment Variables
  */
 
 
-export const authOptions = {
-  adapter: PrismaAdapter(prisma), 
-  providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "email", placeholder: "user@example.com" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
+// export const authOptions = {
+//   adapter: PrismaAdapter(prisma), 
+//   providers: [
+//     CredentialsProvider({
+//       name: "Credentials",
+//       credentials: {
+//         email: { label: "Email", type: "email", placeholder: "user@example.com" },
+//         password: { label: "Password", type: "password" },
+//       },
+//       async authorize(credentials) {
+//         const user = await prisma.user.findUnique({
+//           where: { email: credentials.email },
+//         });
 
-        if (!user || !(await compare(credentials.password, user.password))) {
-          throw new Error("Invalid credentials");
-        }
+//         if (!user || !(await compare(credentials.password, user.password))) {
+//           throw new Error("Invalid credentials");
+//         }
 
-        return user;
-      },
-    }),
-  ],
-  callbacks: {
-    async session({ session, user }) {
-      if (user) {
-        session.user.id = user.id;
-      }
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    },
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/auth/login",
-  },
-};
+//         return user;
+//       },
+//     }),
+//   ],
+//   callbacks: {
+//     async session({ session, user }) {
+//       if (user) {
+//         session.user.id = user.id;
+//       }
+//       return session;
+//     },
+//     async jwt({ token, user }) {
+//       if (user) {
+//         token.id = user.id;
+//       }
+//       return token;
+//     },
+//   },
+//   secret: process.env.NEXTAUTH_SECRET,
+//   session: {
+//     strategy: "jwt",
+//   },
+//   pages: {
+//     signIn: "/auth/login",
+//   },
+// };
 
-const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+// const handler = NextAuth(authOptions);
+// export { handler as GET, handler as POST };
