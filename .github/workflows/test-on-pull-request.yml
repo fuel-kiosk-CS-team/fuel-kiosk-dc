@@ -5,5 +5,3 @@ on:
 jobs:
     build-and-test:
         uses: ./.github/workflows/build-and-test.yml
-        with:
-            upload-pages-artifact: false
