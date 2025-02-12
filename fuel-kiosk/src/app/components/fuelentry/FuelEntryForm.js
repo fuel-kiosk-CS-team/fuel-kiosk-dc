@@ -1,194 +1,132 @@
 import React, { useState } from 'react';
-import styles from './FuelEntryForm.module.css';
+import { Paper, Stack, TextInput, Select, Group, Button } from '@mantine/core';
 
 export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
-    const defaultValues = {
-        dateTimeInsert: new Date()
-            .toLocaleString('en-US', { hour12: false })
-            .replace(/,/g, ''),
-        date: new Date().toLocaleDateString(),
-        totalizerStart: '',
-        fuelSite: siteInfo?.label || '',
-        fuelType: '',
-        eqLicense: '',
-        nameInitials: '',
-        odometer: '',
-        gallonsPumped: '',
-        expCategory: '',
-        projectUnit: '',
-    };
+  const defaultValues = {
+    dateTimeInsert: new Date()
+      .toLocaleString('en-US', { hour12: false })
+      .replace(/,/g, ''),
+    date: new Date().toLocaleDateString(),
+    totalizerStart: '',
+    fuelSite: siteInfo?.label || '',
+    fuelType: '',
+    eqLicense: '',
+    nameInitials: '',
+    odometer: '',
+    gallonsPumped: '',
+    expCategory: '',
+    projectUnit: '',
+  };
 
-    const [formData, setFormData] = useState({
-        ...defaultValues,
-        ...initialValues,
+  const [formData, setFormData] = useState({
+    ...defaultValues,
+    ...initialValues,
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
+  const handleReset = () => {
+    setFormData({
+      ...defaultValues,
+      dateTimeInsert: new Date().toLocaleString('en-US', { hour12: false }),
+      date: new Date().toLocaleDateString(),
+      fuelSite: siteInfo?.label || '',
+      ...initialValues,
     });
+  };
 
-        const handleSubmit = (e) => {
-        e.preventDefault();
-        onSubmit(formData);
-    };
+  return (
+    <Paper shadow="xs" p="md" withBorder>
+      <form onSubmit={handleSubmit}>
+        <Stack spacing="md">
+          <TextInput
+            label="Date/Time Insert"
+            value={formData.dateTimeInsert || ''}
+            readOnly
+          />
+          <TextInput label="Date" value={formData.date || ''} readOnly />
+          <TextInput
+            label="Totalizer Start (xxx.x)"
+            value={formData.totalizerStart || ''}
+            readOnly
+          />
+          <TextInput
+            label="Fuel Site"
+            value={formData.fuelSite || ''}
+            readOnly
+          />
+          <TextInput
+            label="Fuel Type"
+            value={formData.fuelType || ''}
+            readOnly
+          />
+          <TextInput
+            label="EQ License or Desc."
+            value={formData.eqLicense || ''}
+            onChange={(e) =>
+              setFormData({ ...formData, eqLicense: e.target.value })
+            }
+          />
+          <TextInput
+            label="Name, initials, etc."
+            value={formData.nameInitials || ''}
+            onChange={(e) =>
+              setFormData({ ...formData, nameInitials: e.target.value })
+            }
+          />
+          <TextInput
+            label="Odometer (If Required)"
+            value={formData.odometer}
+            onChange={(e) =>
+              setFormData({ ...formData, odometer: e.target.value })
+            }
+            placeholder="No Tenths"
+          />
+          <TextInput
+            label="Gallons Pumped (xx.x)"
+            value={formData.gallonsPumped}
+            onChange={(e) =>
+              setFormData({ ...formData, gallonsPumped: e.target.value })
+            }
+            placeholder="0.0"
+          />
+          <Select
+            label="Exp. Category: (Required)"
+            value={formData.expCategory}
+            onChange={(value) =>
+              setFormData({ ...formData, expCategory: value })
+            }
+            placeholder="Select an option"
+            data={[
+              { value: 'Field Work', label: 'Field Work' },
+              { value: 'Research', label: 'Research' },
+              { value: 'Local Travel', label: 'Local Travel' },
+              { value: 'Out of state travel', label: 'Out of state travel' },
+              { value: 'Various', label: 'Various' },
+              { value: 'Totalizer Reading', label: 'Totalizer Reading' },
+            ]}
+            required
+          />
+          <TextInput
+            label="Project or Unit"
+            value={formData.projectUnit}
+            onChange={(e) =>
+              setFormData({ ...formData, projectUnit: e.target.value })
+            }
+            placeholder="Recommended"
+          />
 
-    const handleReset = () => {
-        setFormData({
-            ...defaultValues,
-            dateTimeInsert: new Date().toLocaleString(),
-            date: new Date().toLocaleDateString(),
-            fuelSite: siteInfo?.label || '',
-            ...initialValues,
-        });
-    };
-
-    return (
-        <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.fieldGroup}>
-                <div className={styles.field}>
-                    <label className={styles.label}>Date/Time Insert</label>
-                    <input
-                        type="text"
-                        value={formData.dateTimeInsert || ''}
-                        readOnly
-                        className={styles.input}
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Date</label>
-                    <input
-                        type="text"
-                        value={formData.date || ''}
-                        readOnly
-                        className={styles.input}
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Totalizer Start (xxx.x)</label>
-                    <input
-                        type="text"
-                        value={formData.totalizerStart || ''}
-                        readOnly
-                        className={styles.input}
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Fuel Site</label>
-                    <input
-                        type="text"
-                        value={formData.fuelSite || ''}
-                        readOnly
-                        className={styles.input}
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Fuel Type</label>
-                    <input
-                        type="text"
-                        value={formData.fuelType || ''}
-                        readOnly
-                        className={styles.input}
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>EQ License or Desc.</label>
-                    <input
-                        type="text"
-                        value={formData.eqLicense || ''}
-                        onChange={(e) =>
-                            setFormData({ ...formData, eqLicense: e.target.value })
-                        }
-                        className={styles.input}
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Name, initials, etc.</label>
-                    <input
-                        type="text"
-                        value={formData.nameInitials || ''}
-                        onChange={(e) =>
-                            setFormData({ ...formData, nameInitials: e.target.value })
-                        }
-                        className={styles.input}
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Odometer (If Required)</label>
-                    <input
-                        type="text"
-                        value={formData.odometer}
-                        onChange={(e) =>
-                            setFormData({ ...formData, odometer: e.target.value })
-                        }
-                        className={styles.input}
-                        placeholder="No Tenths"
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Gallons Pumped (xx.x)</label>
-                    <input
-                        type="text"
-                        value={formData.gallonsPumped}
-                        onChange={(e) =>
-                            setFormData({ ...formData, gallonsPumped: e.target.value })
-                        }
-                        className={styles.input}
-                        placeholder="0.0"
-                    />
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Exp. Category: (Required)</label>
-                    <select
-                        value={formData.expCategory}
-                        onChange={(e) =>
-                            setFormData({ ...formData, expCategory: e.target.value })
-                        }
-                        className={styles.select}
-                        required
-                    >
-                        <option value="" disabled hidden>
-                            Select an option
-                        </option>
-                        <option value="Field Work">Field Work</option>
-                        <option value="Research">Research</option>
-                        <option value="Local Travel">Local Travel</option>
-                        <option value="Out of state travel">Out of state travel</option>
-                        <option value="Various">Various</option>
-                        <option value="Totalizer Reading">Totalizer Reading</option>
-                    </select>
-                </div>
-
-                <div className={styles.field}>
-                    <label className={styles.label}>Project or Unit</label>
-                    <input
-                        type="text"
-                        value={formData.projectUnit}
-                        onChange={(e) =>
-                            setFormData({ ...formData, projectUnit: e.target.value })
-                        }
-                        className={styles.input}
-                        placeholder="Recommended"
-                    />
-                </div>
-            </div>
-
-            <div className={styles.buttonGroup}>
-                <button type="submit" className={styles.submitButton}>
-                    Submit
-                </button>
-                <button
-                    type="button"
-                    onClick={handleReset}
-                    className={styles.resetButton}
-                >
-                    Reset
-                </button>
-            </div>
-        </form>
-    );
+          <Group position="apart" mt="md">
+            <Button type="submit">Submit</Button>
+            <Button variant="outline" onClick={handleReset}>
+              Reset
+            </Button>
+          </Group>
+        </Stack>
+      </form>
+    </Paper>
+  );
 }

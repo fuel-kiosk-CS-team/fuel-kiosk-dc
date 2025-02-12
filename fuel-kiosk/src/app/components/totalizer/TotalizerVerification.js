@@ -1,25 +1,17 @@
 import React from 'react';
-import styles from './TotalizerVerification.module.css';
+import { Stack, Group, Title, Button } from '@mantine/core';
 
 export function TotalizerVerification({ value, onVerify, onBack }) {
-    return (
-        <div className={styles.container}>
-            <h2 className={styles.header}>
-                Verify Totalizer Start: {value}
-            </h2>
-
-            <div className={styles.buttonRow}>
-                <button onClick={() => onVerify(true)} className={styles.button}>
-                    YES
-                </button>
-                <button onClick={() => onVerify(false)} className={styles.button}>
-                    NO
-                </button>
-            </div>
-
-            <button onClick={onBack} className={styles.backButton}>
-                BACK
-            </button>
-        </div>
-    );
+  return (
+    <Stack spacing="md" align="center">
+      <Title order={2}>Totalizer Start: {value}</Title>
+      <Group spacing="md">
+        <Button onClick={() => onVerify(true)}>YES</Button>
+        <Button onClick={() => onVerify(false)}>NO</Button>
+      </Group>
+      <Button onClick={onBack} variant="outline">
+        BACK
+      </Button>
+    </Stack>
+  );
 }
