@@ -1,7 +1,7 @@
 "use client";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { saveSessionOffline, getSessionOffline } from "@/lib/storage";
+import { saveSessionOffline, getSessionOffline } from "@/src/lib/storage";
 
 export default function LoginPage() {
   const { data: session } = useSession();

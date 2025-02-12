@@ -1,126 +1,62 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma from "@/src/lib/prisma"; // Ensure this points to your Prisma instance
-import { compare } from "bcryptjs"; // If hashing passwords
+import { PrismaClient } from "@prisma/client";
 
-/*
-Basic Setup for Authentication, unsure as to whether we will do this for sure, but it's a good baseline.
-
-
-/fuel-kiosk
-│── /src
-│   ├── /app
-│   │   ├── /api
-│   │   │   ├── /auth
-│   │   │   │   ├── [...nextauth]
-│   │   │   │   │   ├── route.js  # NextAuth configuration
-│   │   ├── /auth
-│   │   │   ├── login.js  # Custom login page
-│   ├── /components
-│   │   ├── AuthButton.js  # Sign in/out button component
-│   │   ├── OfflineAwareAuth.js  # Component to check session storage
-│   ├── /lib
-│   │   ├── prisma.js  # Prisma client instance
-│   │   ├── storage.js  # IndexedDB session storage helper
-│   │   ├── auth.js  # Auth utilities (session checking)
-│   ├── /context
-│   │   ├── AuthProvider.js  # SessionProvider wrapper
-│   ├── /styles
-│   │   ├── globals.css  # Global styles
-│── /public
-│   ├── sw.js  # Service Worker for caching auth sessions
-│── /prisma
-│   ├── schema.prisma  # Prisma database schema
-│── .env.local  # Environment variables (NextAuth secret, DB connection, etc.)
-│── next.config.js  # Next.js configuration
-│── package.json  # Dependencies
-│── README.md  # Project documentation
-
-Authentication Setup
-	1.	src/app/api/auth/[...nextauth]/route.js
-	•	Configures NextAuth.js, credentials provider, JWT handling, and Prisma.
-	2.	src/app/auth/login.js
-	•	Custom login page.
-
-Client-Side Authentication
-	3.	src/components/AuthButton.js
-	•	Handles login/logout UI.
-	4.	src/components/OfflineAwareAuth.js
-	•	Checks IndexedDB for session data when offline.
-
-Session Management & Offline Support
-	5.	src/lib/prisma.js
-	•	Prisma client setup.
-	6.	src/lib/storage.js
-	•	Saves session data in IndexedDB.
-	7.	src/lib/auth.js
-	•	Handles fetching session data.
-
-Context Provider
-	8.	src/context/AuthProvider.js
-	•	Wraps the app in SessionProvider.
-
-Service Worker
-	9.	public/sw.js
-	•	Caches auth requests for offline use.
-
-Database Setup
-	10.	prisma/schema.prisma
-
-	•	Defines user model for authentication.
-
-Environment Variables
-	11.	.env.local
-
-	•	Stores secrets for NextAuth.js, database connection, etc.
- * 
- */
-
+const prisma = new PrismaClient();
 
 export const authOptions = {
-  adapter: PrismaAdapter(prisma), 
-  providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        username: { label: "Username", type: "text", placeholder: "username" },
-        password: { label: "Password", type: "text" },
-      },
-      async authorize(credentials) {
-        const user = await prisma.username.findUnique({
-          where: { username: credentials.username },
-        });
+    providers: [
+        CredentialsProvider({
+            name: "Credentials",
+            credentials: {
+                selectedSite: { label: "Site ID", type: "text" },
+                password: { label: "Password", type: "password" }
+            },
+            async authorize(credentials) {
+                if (!credentials.selectedSite || !credentials.password) {
+                    throw new Error("Site and password are required");
+                }
 
-        if (!user || !(await compare(credentials.password, user.password))) {
-          throw new Error("Invalid credentials");
+                // Query database to find a match
+                const user = await prisma.usr_main.findUnique({
+                    where: { usr_userid: credentials.selectedSite }
+                });
+
+                if (!user) {
+                    throw new Error("Invalid site selection.");
+                }
+
+                // Check if password (disabled_reason) matches
+                if (user.disabled_reason !== credentials.password) {
+                    throw new Error("Password did not match for location selected. Please retry.");
+                }
+
+                // If authenticated, return the user's oper_oper_no
+                return { id: user.oper_oper_no, name: user.oper_oper_no };
+            }
+        })
+    ],
+    callbacks: {
+        async session({ session, token }) {
+            if (token.user) {
+                session.user = token.user;
+            }
+            return session;
+        },
+        async jwt({ token, user }) {
+            if (user) {
+                token.user = user;
+            }
+            return token;
         }
-
-        return user;
-      },
-    }),
-  ],
-  callbacks: {
-    async session({ session, user }) {
-      if (user) {
-        session.user.id = user.id;
-      }
-      return session;
     },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
+    secret: process.env.NEXTAUTH_SECRET,
+    session: {
+        strategy: "jwt"
     },
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/auth/login",
-  },
+    pages: {
+        signIn: "/"
+    }
 };
 
 const handler = NextAuth(authOptions);
