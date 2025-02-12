@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
-import { SegmentedControl } from '@mantine/core';
 import {
     Container,
     Title,
@@ -13,6 +12,7 @@ import {
     Stack,
     Text,
 } from '@mantine/core';
+import { FuelTypeSelector } from '../../components/fuelselector/FuelTypeSelector';
 import { TotalizerVerification } from '../../components/totalizer/TotalizerVerification';
 import { FuelEntryForm } from '../../components/fuelentry/FuelEntryForm';
 
@@ -91,18 +91,12 @@ export default function FuelSitePage({ params: paramsPromise }) {
                     {step === 'SELECT_FUEL' && (
                         <Stack spacing="md">
                             <Title order={2}>Select Fuel Type</Title>
-                            <SegmentedControl
-                                radius="xl"
-                                size="md"
-                                data={['Diesel', 'Petrol', 'Electric', 'Hybrid']}
-                                value={selectedFuelType}
-                                onChange={(value) => {
+                            <FuelTypeSelector
+                                selectedType={selectedFuelType}
+                                onSelect={(value) => {
                                     setSelectedFuelType(value);
                                     setStep('VERIFY_TOTALIZER');
                                 }}
-                                // Optionally, if you have custom classes defined in a CSS module,
-                                // you can pass them here via the classNames prop.
-                                // classNames={yourClasses}
                             />
                         </Stack>
                     )}
