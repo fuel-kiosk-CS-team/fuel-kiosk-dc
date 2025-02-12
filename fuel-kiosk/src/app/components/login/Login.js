@@ -5,6 +5,8 @@ import React, { useState, useEffect} from 'react';
 import { PasswordInput, Select, Button } from '@mantine/core';
 // import TooltipFocus from '../components/form/TooltipFocus.js';
 // import { db, posts } from '@/lib/db'
+// import { signIn, signOut, useSession } from "next-auth/react";
+// import { saveSessionOffline, getSessionOffline } from "@/lib/storage";
 
 export function Login(){
 
