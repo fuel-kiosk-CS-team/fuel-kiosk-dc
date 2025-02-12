@@ -9,17 +9,20 @@ export const authOptions = {
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                selectedSite: { label: "Site ID", type: "text" },
+                siteName: { label: "Site ID", type: "text" },
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
-                if (!credentials.selectedSite || !credentials.password) {
+				console.log(credentials)
+				console.log("site and pass check",!credentials.siteName || !credentials.password)
+
+                if (!credentials.siteName || !credentials.password) {
                     throw new Error("Site and password are required");
                 }
-
+				
                 // Query database to find a match
-                const user = await prisma.usr_main.findUnique({
-                    where: { usr_userid: credentials.selectedSite }
+                const user = await prisma.uSR_MAIN.findUnique({
+                    where: { USR_userid: credentials.siteName }
                 });
 
                 if (!user) {

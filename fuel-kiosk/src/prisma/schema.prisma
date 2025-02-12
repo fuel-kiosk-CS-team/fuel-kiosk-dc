@@ -17,65 +17,63 @@
 // Use following link to figure out how to import Prisma Client as needed:
 // https://pris.ly/d/importing-client
 
+
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id         Int        @id @default(autoincrement())
-    createdAt  DateTime   @default(now())
-    email      String     @unique
-    name       String?
-    role       Role       @default(USER)
-    password   String
-}
-
-enum Role {
-    USER
-    ADMIN
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  name      String?
+  role      Role     @default(USER)
+  password  String
 }
 
 model USR_MAIN {
-  USR_userid      String  @id @unique
-  oper_oper_no    String  @unique
-  disabled_reason String
-
-  // Relations
+  USR_userid       String         @id @unique
+  oper_oper_no     String         @unique
+  disabled_reason  String
   FuelTransactions FTK_bulkfuel[]
 }
 
 model FTK_bulkfuel {
-  id               Int     @id @default(autoincrement())
+  id               Int       @id @default(autoincrement())
   datetime_Insert  DateTime
-  ftk_date        DateTime
-  loc_code        String
-  fuel_type       String
-  totalizer_start Decimal?
-  eq_no           String?
-  pid_info        String?
-  odometer        Int?
-  qty_fuel        Decimal?
-  totalizer_end   Decimal?
-  acct_code       String?
+  ftk_date         DateTime
+  loc_code         String
+  fuel_type        String
+  totalizer_start  Decimal?
+  eq_no            String?
+  pid_info         String?
+  odometer         Int?
+  qty_fuel         Decimal?
+  totalizer_end    Decimal?
+  acct_code        String?
   business_purpose String?
   totalizer_update Decimal?
+  Location         LOC_MAIN  @relation(fields: [loc_code], references: [LOC_loc_code])
+  User             USR_MAIN? @relation(fields: [pid_info], references: [oper_oper_no])
 
-  // Relations
-  Location        LOC_MAIN @relation(fields: [loc_code], references: [LOC_loc_code])
-  User           USR_MAIN? @relation(fields: [pid_info], references: [oper_oper_no])
+  @@index([loc_code], map: "FTK_bulkfuel_loc_code_fkey")
+  @@index([pid_info], map: "FTK_bulkfuel_pid_info_fkey")
 }
 
 model LOC_MAIN {
-  LOC_loc_code String  @id @unique
-  name         String
-  email_addr   String?
-  is_fuel_site Boolean @default(false) // Prisma uses Boolean instead of CHAR(1)
-
-  // Relations
+  LOC_loc_code     String         @id @unique
+  name             String
+  email_addr       String?
+  is_fuel_site     Boolean        @default(false)
   FuelTransactions FTK_bulkfuel[]
+}
+
+enum Role {
+  USER
+  ADMIN
 }

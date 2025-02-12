@@ -156,37 +156,46 @@ export function Login() {
         loadData();
     }, []);
 
+
+
     // Handle login
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError(null);
     
+        // console.log(selectedSite)
+
         if (!selectedSite) {
             setError("Please select a fuel site!");
             return;
         }
-    
+        
+        const siteObject = siteData.find(site => site.value === selectedSite)
+        const siteName = siteObject.label
+
         if (password.trim() === '') {
             setError("Please enter a password!");
             return;
         }
     
+        console.log(siteName)
+
         const result = await signIn("credentials", {
             redirect: false,
             // Pass the selected site as the username - can change if we do users, but then we will need to change /src/app/api/auth/[...nextauth]/route.js
-            selectedSite, 
+            siteName, 
             password
         });
     
         if (result?.error) {
             setError(result.error);
         } else {
-            await saveSessionOffline({ site: selectedSite });
+            await saveSessionOffline({ site: siteName });
             // We can change this to go elsewhere, can also redirect based on if admin here
-            if(selectedSite === "ADMIN--FUEL SITE ADMINISTRATOR"){
+            if(siteName === "ADMIN--FUEL SITE ADMINISTRATOR"){
                 router.push("/admin")
             } else {
-                router.push("/input-form");
+                // router.push("/input-form");
             }
         }
     };
@@ -199,6 +208,7 @@ export function Login() {
                 data={siteData}
                 value={selectedSite}
                 onChange={setSelectedSite}
+                // onChange={(value) => setSelectedSite(value)} // Store the label directly
             />
             <PasswordInput 
                 required

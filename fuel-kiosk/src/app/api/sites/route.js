@@ -6,6 +6,20 @@ import { NextResponse } from 'next/server';
 export const revalidate = 60; // Revalidate every 60 seconds
 
 export async function GET() {
+    // const fuelSites = [
+    //     { value:    'ADMIN--FUEL SITE ADMINISTRATOR', route: '/admin'},
+    //     { value:    'CBARC-M--COLUMBIA BASIN AG RESEARCH-MOR' },
+    //     { value:    'CBARC-P--COLUMBIA BASIN AG RESEARCH-PEN' },
+    //     { value:    'COAREC--CENTRAL OREGON AG RES EXT' },
+    //     { value:    'DAIRY--CORVALLIS' },
+    //     { value:    'EOARC-B--EASTERN OREGON AG RESEARCH' },
+    //     { value:    'EOARC-U--EASTERN OREGON AG RESEARCH' },
+    //     { value:    'HAREC--HERMISTON AG RESEARCH STATION' },
+    //     { value:    'KBREC--KLAMATH BASIN EXPERIMENT STA' },
+    //     { value:    'MES--MALHEUR EXPERIMENT STATION' },
+    //     { value:    'NWREC--NORTH WILLAMETTE RES EXTEN CTR' },
+    //     { value:    'SOREC--SOUTHERN OREGON RES EXT CTR' },
+    // ];
     const fuelSites = [
         { value: 'site-1', label: 'ADMIN--FUEL SITE ADMINISTRATOR', route: '/admin'},
         { value: 'site-2', label: 'CBARC-M--COLUMBIA BASIN AG RESEARCH-MOR' },
