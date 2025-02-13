@@ -1,16 +1,21 @@
 'use client'
 
-import classes from "./admin.module.css";
+import { useState } from 'react';
+
 import { NavbarSimple } from "./components/navbar/NavbarSimple";
 
+import classes from "./admin.module.css";
+
 export default function Admin() {
+    const [selectedPage, setSelectedPage] = useState('');
+
     return (
         <div className={classes.container}>
             <aside className={classes.sidebar}>
-                <NavbarSimple />
+                <NavbarSimple setPage={setSelectedPage} />
             </aside>
             <main className={classes.mainContent}>
-                <h1>Welcome to the Admin Panel</h1>
+                <h1>Welcome to the Admin Panel for {selectedPage}</h1>
                 <p>Lorem ipsum odor amet, consectetuer adipiscing elit. Volutpat torquent maximus platea tincidunt aliquam inceptos curabitur donec. Eget faucibus congue hendrerit eros enim sit vel. Pellentesque dui lectus vulputate phasellus mollis faucibus, amet pellentesque. Mauris parturient dolor quisque orci volutpat sem laoreet. Quis orci ornare cubilia amet nec. Tristique porttitor dictum in vivamus placerat integer ac. Viverra sed faucibus leo dignissim, amet tincidunt cursus viverra. Nunc porttitor ex laoreet sem molestie platea varius enim fringilla.
 
                     Venenatis et amet molestie ad platea interdum. Inceptos nec ligula diam orci rhoncus. Interdum leo rhoncus in nibh venenatis ex proin dictumst. Fames mi bibendum inceptos at mattis. Sollicitudin iaculis ex sapien suspendisse metus fusce est vestibulum. Class et per sapien hendrerit facilisi habitant lacus odio. Arcu dui litora luctus nec torquent ut commodo facilisi litora. Sagittis luctus lacinia malesuada mi consectetur; ipsum velit.

@@ -1,5 +1,5 @@
 // Step 0: Create .env file
-// Create an environment variable called DATABASE_URL 
+// Create an environment variable called DATABASE_URL
 // It should have the link to local db to it of the form:
 // "mysql://*username - probs root*:*password*@localhost:*port number*/*database name*"
 
@@ -24,20 +24,6 @@ generator client {
 datasource db {
     provider = "mysql"
     url      = env("DATABASE_URL")
-}
-
-model User {
-    id         Int        @id @default(autoincrement())
-    createdAt  DateTime   @default(now())
-    email      String     @unique
-    name       String?
-    role       Role       @default(USER)
-    password   String
-}
-
-enum Role {
-    USER
-    ADMIN
 }
 
 model USR_MAIN {
