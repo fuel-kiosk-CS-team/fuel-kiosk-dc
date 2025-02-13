@@ -1,0 +1,62 @@
+[
+  {
+    "USR_userid": "user-admin",
+    "oper_oper_no": "ADMIN",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-cbarc-m",
+    "oper_oper_no": "CBARC-M",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-cbarc-p",
+    "oper_oper_no": "CBARC-P",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-coarec",
+    "oper_oper_no": "COAREC",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-dairy",
+    "oper_oper_no": "DAIRY",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-eoarc-b",
+    "oper_oper_no": "EOARC-B",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-eoarc-u",
+    "oper_oper_no": "EOARC-U",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-harec",
+    "oper_oper_no": "HAREC",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-kbrec",
+    "oper_oper_no": "KBREC",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-mes",
+    "oper_oper_no": "MES",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-nwrec",
+    "oper_oper_no": "NWREC",
+    "disabled_reason": "none"
+  },
+  {
+    "USR_userid": "user-sorec",
+    "oper_oper_no": "SOREC",
+    "disabled_reason": "none"
+  }
+]

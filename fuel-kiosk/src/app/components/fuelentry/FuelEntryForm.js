@@ -9,6 +9,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
         date: new Date().toLocaleDateString(),
         totalizerStart: '',
         fuelSite: siteInfo?.label || '',
+        fuelSiteCode: siteInfo?.value || '',
         fuelType: '',
         eqLicense: '',
         nameInitials: '',
@@ -22,10 +23,57 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
         ...defaultValues,
         ...initialValues,
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState(null);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit(formData);
+        setIsSubmitting(true);
+        setError(null);
+        
+        try {
+            // Prepare the data for submission
+            const dataToSubmit = {
+                loc_code: siteInfo?.label || '',
+                fuel_type: formData.fuelType,
+                totalizerStart: formData.totalizerStart,
+                eqLicense: formData.eqLicense,
+                nameInitials: formData.nameInitials,
+                odometer: formData.odometer,
+                gallonsPumped: formData.gallonsPumped,
+                expCategory: formData.expCategory,
+                projectUnit: formData.projectUnit
+            };
+    
+            //console.log('Submitting data:', dataToSubmit);
+    
+            const response = await fetch('/api/fuel-entry', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataToSubmit)
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const result = await response.json();
+            
+            if (result.success) {
+                onSubmit?.(result.data);
+                handleReset();
+                alert('Fuel entry saved successfully!');
+            } else {
+                throw new Error(result.error || 'Failed to save fuel entry');
+            }
+        } catch (err) {
+            console.error('Submission error:', err);
+            setError(err.message);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleReset = () => {
@@ -34,45 +82,63 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
             dateTimeInsert: new Date().toLocaleString('en-US', { hour12: false }),
             date: new Date().toLocaleDateString(),
             fuelSite: siteInfo?.label || '',
-            ...initialValues,
+            fuelSiteCode: siteInfo?.value || '',
         });
+        setError(null);
     };
 
     return (
         <Paper shadow="xs" p="md" withBorder>
             <form onSubmit={handleSubmit}>
                 <Stack spacing="md">
+                    {error && (
+                        <div style={{ color: 'red', marginBottom: '1rem' }}>
+                            {error}
+                        </div>
+                    )}
+                    
                     <TextInput
                         label="Date/Time Insert"
                         value={formData.dateTimeInsert || ''}
                         readOnly
                     />
-                    <TextInput label="Date" value={formData.date || ''} readOnly />
+                    <TextInput 
+                        label="Date" 
+                        value={formData.date || ''} 
+                        readOnly 
+                    />
                     <TextInput
                         label="Totalizer Start (xxx.x)"
-                        value={formData.totalizerStart || ''}
-                        readOnly
+                        value={formData.totalizerStart}
+                        onChange={(e) =>
+                            setFormData({ ...formData, totalizerStart: e.target.value })
+                        }
+                        required
                     />
                     <TextInput
                         label="Fuel Site"
-                        value={formData.fuelSite || ''}
+                        value={formData.fuelSite}
                         readOnly
                     />
                     <TextInput
                         label="Fuel Type"
-                        value={formData.fuelType || ''}
-                        readOnly
+                        value={formData.fuelType}
+                        onChange={(e) =>
+                            setFormData({ ...formData, fuelType: e.target.value })
+                        }
+                        required
                     />
+                    {/* Rest of your form fields... */}
                     <TextInput
                         label="EQ License or Desc."
-                        value={formData.eqLicense || ''}
+                        value={formData.eqLicense}
                         onChange={(e) =>
                             setFormData({ ...formData, eqLicense: e.target.value })
                         }
                     />
                     <TextInput
                         label="Name, initials, etc."
-                        value={formData.nameInitials || ''}
+                        value={formData.nameInitials}
                         onChange={(e) =>
                             setFormData({ ...formData, nameInitials: e.target.value })
                         }
@@ -92,6 +158,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
                             setFormData({ ...formData, gallonsPumped: e.target.value })
                         }
                         placeholder="0.0"
+                        required
                     />
                     <Select
                         label="Exp. Category: (Required)"
@@ -120,8 +187,18 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
                     />
 
                     <Group position="apart" mt="md">
-                        <Button type="submit">Submit</Button>
-                        <Button variant="outline" onClick={handleReset}>
+                        <Button 
+                            type="submit" 
+                            loading={isSubmitting}
+                            disabled={isSubmitting}
+                        >
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
+                        </Button>
+                        <Button 
+                            variant="outline" 
+                            onClick={handleReset}
+                            disabled={isSubmitting}
+                        >
                             Reset
                         </Button>
                     </Group>
