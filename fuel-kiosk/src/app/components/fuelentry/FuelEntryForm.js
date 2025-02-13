@@ -192,7 +192,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
                             loading={isSubmitting}
                             disabled={isSubmitting}
                         >
-                            {isSubmitting ? 'Saving...' : 'Save'}
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
                         <Button 
                             variant="outline" 
