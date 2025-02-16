@@ -1,39 +1,95 @@
 'use client'
 
-import classes from "./admin.module.css";
+import { useState, useEffect } from 'react';
+import {
+    Container,
+    Title,
+    Stack,
+    Text,
+
+} from '@mantine/core';
+
 import { NavbarSimple } from "./components/navbar/NavbarSimple";
 
+import { AdminTotalizerVerification } from './components/admintotalizer/AdminTotalizerVerification';
+import { FuelTypeSelector } from "../components/fuelselector/FuelTypeSelector";
+import { FuelEntryForm } from '../components/fuelentry/FuelEntryForm';
+
+import classes from "./admin.module.css";
+
 export default function Admin() {
+    const [selectedPage, setSelectedPage] = useState('');
+    const [step, setStep] = useState('SELECT_FUEL');
+    const [selectedFuelType, setSelectedFuelType] = useState(null);
+    const [totalizerValue, setTotalizerValue] = useState('0.3');
+
+    useEffect(() => {
+        setStep('SELECT_FUEL');
+    }, [selectedPage]);
+
     return (
         <div className={classes.container}>
             <aside className={classes.sidebar}>
-                <NavbarSimple />
+                <NavbarSimple setPage={setSelectedPage} />
             </aside>
             <main className={classes.mainContent}>
-                <h1>Welcome to the Admin Panel</h1>
-                <p>Lorem ipsum odor amet, consectetuer adipiscing elit. Volutpat torquent maximus platea tincidunt aliquam inceptos curabitur donec. Eget faucibus congue hendrerit eros enim sit vel. Pellentesque dui lectus vulputate phasellus mollis faucibus, amet pellentesque. Mauris parturient dolor quisque orci volutpat sem laoreet. Quis orci ornare cubilia amet nec. Tristique porttitor dictum in vivamus placerat integer ac. Viverra sed faucibus leo dignissim, amet tincidunt cursus viverra. Nunc porttitor ex laoreet sem molestie platea varius enim fringilla.
+                <Container size="sm" p="md">
+                    {selectedPage ? (
+                        <Stack spacing="lg">
+                            <Title order={1}>{selectedPage}</Title>
 
-                    Venenatis et amet molestie ad platea interdum. Inceptos nec ligula diam orci rhoncus. Interdum leo rhoncus in nibh venenatis ex proin dictumst. Fames mi bibendum inceptos at mattis. Sollicitudin iaculis ex sapien suspendisse metus fusce est vestibulum. Class et per sapien hendrerit facilisi habitant lacus odio. Arcu dui litora luctus nec torquent ut commodo facilisi litora. Sagittis luctus lacinia malesuada mi consectetur; ipsum velit.
+                            {step === 'SELECT_FUEL' && (
+                                <Stack spacing="md">
+                                    <Title order={2}>Select Fuel Type</Title>
+                                    <FuelTypeSelector
+                                        selectedType={selectedFuelType}
+                                        onSelect={(value) => {
+                                            setSelectedFuelType(value);
+                                            setStep('VERIFY_TOTALIZER');
+                                        }}
+                                    />
+                                </Stack>
+                            )}
 
-                    Torquent massa egestas malesuada vulputate accumsan. Integer fringilla sollicitudin rutrum molestie neque enim. Aliquam venenatis fringilla elit vestibulum tellus. Torquent per leo blandit porta turpis. Efficitur metus adipiscing suscipit egestas cursus. Fusce libero magna justo vel ultricies.
+                            {step === 'VERIFY_TOTALIZER' && (
+                                <Stack spacing="md">
+                                    <Title order={2}>Totalizer Initialization/Reset: </Title>
+                                    <AdminTotalizerVerification
+                                        value={totalizerValue}
+                                        onVerify={(verified) => {
+                                            if (verified) {
+                                                setStep('ENTRY_FORM');
+                                            } else {
+                                                alert('Please contact administrator for assistance');
+                                            }
+                                        }}
+                                        onBack={() => setStep('SELECT_FUEL')}
+                                    />
+                                </Stack>
+                            )}
 
-                    Parturient pretium luctus posuere; rutrum id sit. Platea fringilla primis aptent orci adipiscing nam; integer mollis scelerisque. Eget libero nec ligula gravida amet et pulvinar mollis. Euismod ad suspendisse egestas molestie nisi ridiculus maecenas per. Fringilla aenean primis et montes lobortis ipsum. Malesuada iaculis magna feugiat turpis tortor semper suscipit suscipit. Quam diam cubilia sed primis sollicitudin mi sapien quam. Fringilla ut curae porttitor nunc pellentesque pellentesque pulvinar vulputate.
-
-                    Leo sodales magnis cubilia arcu euismod fringilla efficitur ad. Lobortis tincidunt et sapien rutrum ullamcorper egestas euismod. Sociosqu ultrices litora molestie quis blandit auctor. Lobortis duis condimentum sapien hac nostra massa. Libero nulla proin velit congue massa morbi risus. Praesent egestas inceptos tristique dignissim aptent suspendisse ante urna magna. Platea primis nisi netus magna volutpat. Velit efficitur morbi natoque tristique blandit tristique feugiat. Penatibus habitant senectus ligula vehicula cras est quam natoque placerat.
-
-                    Ultricies nec metus aenean morbi nunc, placerat praesent sociosqu. Est lacinia vivamus commodo tortor, et curabitur quis hac lacinia. Adipiscing ligula justo vestibulum sed felis maximus mauris. Mollis rutrum sed primis sed montes? Libero montes velit eget tincidunt curae. Lacinia integer rutrum ante efficitur augue phasellus semper. Purus rhoncus vulputate dignissim nunc aptent. At hendrerit cras maecenas accumsan odio vulputate.</p>
-
-                <p>Lorem ipsum odor amet, consectetuer adipiscing elit. Volutpat torquent maximus platea tincidunt aliquam inceptos curabitur donec. Eget faucibus congue hendrerit eros enim sit vel. Pellentesque dui lectus vulputate phasellus mollis faucibus, amet pellentesque. Mauris parturient dolor quisque orci volutpat sem laoreet. Quis orci ornare cubilia amet nec. Tristique porttitor dictum in vivamus placerat integer ac. Viverra sed faucibus leo dignissim, amet tincidunt cursus viverra. Nunc porttitor ex laoreet sem molestie platea varius enim fringilla.
-
-                    Venenatis et amet molestie ad platea interdum. Inceptos nec ligula diam orci rhoncus. Interdum leo rhoncus in nibh venenatis ex proin dictumst. Fames mi bibendum inceptos at mattis. Sollicitudin iaculis ex sapien suspendisse metus fusce est vestibulum. Class et per sapien hendrerit facilisi habitant lacus odio. Arcu dui litora luctus nec torquent ut commodo facilisi litora. Sagittis luctus lacinia malesuada mi consectetur; ipsum velit.
-
-                    Torquent massa egestas malesuada vulputate accumsan. Integer fringilla sollicitudin rutrum molestie neque enim. Aliquam venenatis fringilla elit vestibulum tellus. Torquent per leo blandit porta turpis. Efficitur metus adipiscing suscipit egestas cursus. Fusce libero magna justo vel ultricies.
-
-                    Parturient pretium luctus posuere; rutrum id sit. Platea fringilla primis aptent orci adipiscing nam; integer mollis scelerisque. Eget libero nec ligula gravida amet et pulvinar mollis. Euismod ad suspendisse egestas molestie nisi ridiculus maecenas per. Fringilla aenean primis et montes lobortis ipsum. Malesuada iaculis magna feugiat turpis tortor semper suscipit suscipit. Quam diam cubilia sed primis sollicitudin mi sapien quam. Fringilla ut curae porttitor nunc pellentesque pellentesque pulvinar vulputate.
-
-                    Leo sodales magnis cubilia arcu euismod fringilla efficitur ad. Lobortis tincidunt et sapien rutrum ullamcorper egestas euismod. Sociosqu ultrices litora molestie quis blandit auctor. Lobortis duis condimentum sapien hac nostra massa. Libero nulla proin velit congue massa morbi risus. Praesent egestas inceptos tristique dignissim aptent suspendisse ante urna magna. Platea primis nisi netus magna volutpat. Velit efficitur morbi natoque tristique blandit tristique feugiat. Penatibus habitant senectus ligula vehicula cras est quam natoque placerat.
-
-                    Ultricies nec metus aenean morbi nunc, placerat praesent sociosqu. Est lacinia vivamus commodo tortor, et curabitur quis hac lacinia. Adipiscing ligula justo vestibulum sed felis maximus mauris. Mollis rutrum sed primis sed montes? Libero montes velit eget tincidunt curae. Lacinia integer rutrum ante efficitur augue phasellus semper. Purus rhoncus vulputate dignissim nunc aptent. At hendrerit cras maecenas accumsan odio vulputate.</p>
+                            {step === 'ENTRY_FORM' && (
+                                <Stack spacing="md">
+                                    <Title order={2}>Fuel Site Entry Log</Title>
+                                    <FuelEntryForm
+                                        siteInfo={selectedPage}
+                                        initialValues={{
+                                            totalizerStart: totalizerValue,
+                                            fuelType: selectedFuelType,
+                                        }}
+                                        onSubmit={(data) => {
+                                            console.log('Form submitted:', data);
+                                            setStep('SELECT_FUEL');
+                                            setSelectedFuelType(null);
+                                        }}
+                                    />
+                                </Stack>
+                            )}
+                        </Stack>
+                    ) : (
+                            <Text>Site information not available</Text>
+                        )}
+                </Container>
             </main>
         </div>
     );

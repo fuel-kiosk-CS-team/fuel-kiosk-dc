@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Setup MySQL container using compose
-sudo docker compose -f compose-dev.yaml up -d
+docker compose -f compose-dev.yaml up -d
 
 # Give time for DB to init
 echo "Waiting on DB to come up..."

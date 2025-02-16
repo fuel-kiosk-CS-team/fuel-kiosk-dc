@@ -9,18 +9,33 @@
 
 .navbarMain {
     flex: 1;
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+
+.navbarMain::-webkit-scrollbar {
+    display: none;  /* Hide scrollbar for Chrome, Safari, and Edge */
 }
 
 .header {
+    font-size: 1.25em;
     padding-bottom: var(--mantine-spacing-md);
-    margin-bottom: calc(var(--mantine-spacing-md) * 1.5);
+    margin-bottom: calc(var(--mantine-spacing-md) * 1);
     border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+    position: sticky;
+    background: var(--mantine-color-body);
+    top: 0;
+    z-index: 10;
 }
 
 .footer {
     padding-top: var(--mantine-spacing-md);
     margin-top: var(--mantine-spacing-md);
     border-top: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
 }
 
 .link {

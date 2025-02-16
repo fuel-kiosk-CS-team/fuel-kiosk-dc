@@ -1,43 +1,66 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
-    Icon2fa,
-    IconBellRinging,
-    IconDatabaseImport,
-    IconFingerprint,
-    IconKey,
     IconLogout,
-    IconReceipt2,
-    IconSettings,
-    IconSwitchHorizontal,
+    IconMapPin2
 } from '@tabler/icons-react';
-import { Code, Group } from '@mantine/core';
+import { Group } from '@mantine/core';
+
 import classes from './NavbarSimple.module.css';
 
-const data = [
-    { link: '', label: 'Notifications', icon: IconBellRinging },
-    { link: '', label: 'Billing', icon: IconReceipt2 },
-    { link: '', label: 'Security', icon: IconFingerprint },
-    { link: '', label: 'SSH Keys', icon: IconKey },
-    { link: '', label: 'Databases', icon: IconDatabaseImport },
-    { link: '', label: 'Authentication', icon: Icon2fa },
-    { link: '', label: 'Other Settings', icon: IconSettings },
-];
+export function NavbarSimple({ setPage }) {
+    const router = useRouter();
 
-export function NavbarSimple() {
-    const [active, setActive] = useState('Billing');
+    const [active, setActive] = useState('');
+    const [siteData, setSiteData] = useState([]);
 
-    const links = data.map((item) => (
+    // Temporary example of how we can get site data - currently using localStorage (likely to be removed or changed soon) or an API call
+    useEffect(() => {
+        const loadData = async () => {
+            const localData = localStorage.getItem('siteData');
+
+            if (localData) {
+                let jsonData = JSON.parse(localData);
+                // Parse and use local data if available
+                setSiteData(jsonData);
+
+                let firstSite = jsonData.filter(item => item.label !== 'ADMIN--FUEL SITE ADMINISTRATOR')[0].label;
+                setActive(firstSite);
+                setPage(firstSite)
+            } else {
+                // Otherwise, fetch from the server
+                try {
+                    const response = await fetch('/api/sites');
+                    if (response.ok) {
+                        const data = await response.json();
+                        setSiteData(data);
+                        setActive(data[0].label);
+                        setPage(data[0].label);
+                        localStorage.setItem('siteData', JSON.stringify(data));
+                    } else {
+                        console.error("Failed to fetch data from server.");
+                    }
+                } catch (error) {
+                    console.error("Error fetching site data:", error);
+                }
+            }
+        };
+        loadData();
+    }, []);
+
+    const links = siteData.filter(item => item.label !== 'ADMIN--FUEL SITE ADMINISTRATOR').map((item) => (
         <a
             className={classes.link}
             data-active={item.label === active || undefined}
-            href={item.link}
+            href='#'
             key={item.label}
             onClick={(event) => {
                 event.preventDefault();
                 setActive(item.label);
+                setPage(item.label);
             }}
         >
-            <item.icon className={classes.linkIcon} stroke={1.5} />
+            <IconMapPin2 className={classes.linkIcon} stroke={1.5} />
             <span>{item.label}</span>
         </a>
     ));
@@ -46,18 +69,16 @@ export function NavbarSimple() {
         <nav className={classes.navbar}>
             <div className={classes.navbarMain}>
                 <Group className={classes.header} justify="space-between">
-                    Fuel Kiosk
+                    Fuel Kiosk Admin Dashboard
                 </Group>
                 {links}
             </div>
 
             <div className={classes.footer}>
-                <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
-                    <IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-                    <span>Change account</span>
-                </a>
-
-                <a href="#" className={classes.link} onClick={(event) => event.preventDefault()}>
+                <a href="#" className={classes.link} onClick={(event) => {
+                    event.preventDefault()
+                    router.push('/')
+                }}>
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>Logout</span>
                 </a>
