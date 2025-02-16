@@ -1,5 +1,9 @@
+'use client'
+
 import React from 'react';
-import { Group, Button } from '@mantine/core';
+
+import { Stack, Group, Button } from '@mantine/core';
+import { useRouter } from 'next/navigation';
 
 export function FuelTypeSelector({ onSelect, selectedType }) {
     const fuelTypes = [
@@ -9,17 +13,23 @@ export function FuelTypeSelector({ onSelect, selectedType }) {
         { id: 'CLEAR_GAS', label: 'CLEAR GAS' },
     ];
 
+    const router = useRouter();
+
     return (
-        <Group position="center" spacing="sm">
-            {fuelTypes.map((type) => (
-                <Button
-                    key={type.id}
-                    onClick={() => onSelect(type.id)}
-                    variant={selectedType === type.id ? 'filled' : 'outline'}
-                >
-                    {type.label}
-                </Button>
-            ))}
-        </Group>
+        <Stack>
+            <Group position="center" spacing="sm">
+                {fuelTypes.map((type) => (
+                    <Button
+                        key={type.id}
+                        onClick={() => onSelect(type.id)}
+                        variant={selectedType === type.id ? 'filled' : 'outline'}
+                    >
+                        {type.label}
+                    </Button>
+                ))}
+            </Group>
+            <Button onClick={() => router.push('/transactions')}>View Transaction Records</Button>
+            <Button onClick={() => router.push('/')}>Logout</Button>
+        </Stack>
     );
 }
