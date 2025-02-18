@@ -31,9 +31,12 @@ try{
     
     for (const site of sites) {
         const [operOperNo, _] = site.label.split("--");
+        // like 'admin'
         const oper_no_lower = operOperNo.toLowerCase();
         // Right now just makes up some random four digit code as the 'password'
-        const disabled_reason = Math.floor(1000 + Math.random() * 9000).toString();
+        // const disabled_reason = Math.floor(1000 + Math.random() * 9000).toString();
+        // Temp const password for all fuel sites for testing purposes
+        const disabled_reason = 1111;
         
         await prisma.uSR_MAIN.create({
             data: {

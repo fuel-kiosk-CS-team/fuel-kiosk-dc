@@ -12,9 +12,11 @@ import {
     Stack,
     Text,
 } from '@mantine/core';
-import { FuelTypeSelector } from '../../components/fuelselector/FuelTypeSelector';
-import { TotalizerVerification } from '../../components/totalizer/TotalizerVerification';
-import { FuelEntryForm } from '../../components/fuelentry/FuelEntryForm';
+import { FuelTypeSelector } from '../../../components/fuelselector/FuelTypeSelector';
+import { TotalizerVerification } from '../../../components/totalizer/TotalizerVerification';
+import { FuelEntryForm } from '../../../components/fuelentry/FuelEntryForm';
+import { SignOutButton } from '../../../components/auth/SignOutButton';
+
 
 export default function FuelSitePage({ params: paramsPromise }) {
     const router = useRouter();
@@ -77,6 +79,7 @@ export default function FuelSitePage({ params: paramsPromise }) {
                         <Text>Requested Site ID: {siteId}</Text>
                     </Paper>
                     <Button onClick={() => router.push('/')}>Return to Home</Button>
+                    <SignOutButton/>
                 </Stack>
             </Container>
         );

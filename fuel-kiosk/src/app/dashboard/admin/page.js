@@ -2,8 +2,26 @@
 
 import classes from "./admin.module.css";
 import { NavbarSimple } from "./components/navbar/NavbarSimple";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Admin() {
+
+    const { data: session, status } = useSession();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (status === "loading") return;
+        if (!session || session.user.role !== "admin") {
+            router.push("/unauthorized"); // Redirect if not admin
+        }
+    }, [session, status, router]);
+
+    if (status === "loading") {
+        return <p>Loading...</p>;
+    }
+
     return (
         <div className={classes.container}>
             <aside className={classes.sidebar}>

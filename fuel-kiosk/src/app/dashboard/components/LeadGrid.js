@@ -2,7 +2,7 @@ import { Container, Grid, SimpleGrid, Skeleton } from '@mantine/core';
 
 const PRIMARY_COL_HEIGHT = '300px';
 
-export function LeadGrid({
+export default function LeadGrid({
   primaryContent,
   secondaryTopContent,
   secondaryBottomLeftContent,
