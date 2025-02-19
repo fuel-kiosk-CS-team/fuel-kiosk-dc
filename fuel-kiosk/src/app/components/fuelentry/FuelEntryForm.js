@@ -8,8 +8,8 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
             .replace(/,/g, ''),
         date: new Date().toLocaleDateString(),
         totalizerStart: '',
-        fuelSite: siteInfo?.label || '',
-        fuelSiteCode: siteInfo?.value || '',
+        fuelSite: `${siteInfo?.LOC_loc_code}--${siteInfo?.name}` || '',
+        fuelSiteCode: siteInfo?.LOC_loc_code || '',
         fuelType: '',
         eqLicense: '',
         nameInitials: '',
@@ -30,11 +30,11 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
         e.preventDefault();
         setIsSubmitting(true);
         setError(null);
-        
+
         try {
             // Prepare the data for submission
             const dataToSubmit = {
-                loc_code: siteInfo?.label || '',
+                loc_code: formData.fuelSiteCode || '',
                 fuel_type: formData.fuelType,
                 totalizerStart: formData.totalizerStart,
                 eqLicense: formData.eqLicense,
@@ -44,9 +44,9 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
                 expCategory: formData.expCategory,
                 projectUnit: formData.projectUnit
             };
-    
+
             //console.log('Submitting data:', dataToSubmit);
-    
+
             const response = await fetch('/api/fuel-entry', {
                 method: 'POST',
                 headers: {
@@ -54,13 +54,13 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
                 },
                 body: JSON.stringify(dataToSubmit)
             });
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-    
+
             const result = await response.json();
-            
+
             if (result.success) {
                 onSubmit?.(result.data);
                 handleReset();
@@ -81,8 +81,6 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
             ...defaultValues,
             dateTimeInsert: new Date().toLocaleString('en-US', { hour12: false }),
             date: new Date().toLocaleDateString(),
-            fuelSite: siteInfo?.label || '',
-            fuelSiteCode: siteInfo?.value || '',
         });
         setError(null);
     };
@@ -96,16 +94,16 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
                             {error}
                         </div>
                     )}
-                    
+
                     <TextInput
                         label="Date/Time Insert"
                         value={formData.dateTimeInsert || ''}
                         readOnly
                     />
-                    <TextInput 
-                        label="Date" 
-                        value={formData.date || ''} 
-                        readOnly 
+                    <TextInput
+                        label="Date"
+                        value={formData.date || ''}
+                        readOnly
                     />
                     <TextInput
                         label="Totalizer Start (xxx.x)"
@@ -187,15 +185,15 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
                     />
 
                     <Group position="apart" mt="md">
-                        <Button 
-                            type="submit" 
+                        <Button
+                            type="submit"
                             loading={isSubmitting}
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? 'Submitting...' : 'Submit'}
                         </Button>
-                        <Button 
-                            variant="outline" 
+                        <Button
+                            variant="outline"
                             onClick={handleReset}
                             disabled={isSubmitting}
                         >
