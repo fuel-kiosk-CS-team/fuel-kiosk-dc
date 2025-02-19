@@ -1,27 +1,26 @@
 const { PrismaClient } = require('@prisma/client');
-const fs = require('fs');
 const prisma = new PrismaClient();
 
-const userData = require('./test-data/users.json');
-const bulkFuelData = require('./test-data/fuelData.json');
-const fuelSitesData = require('./test-data/fuelSites.json');
-const usrMainData = require('./test-data/usrMain.json');
+const loc_main_json = require('./test-data/LOC_MAIN.json');
+const usr_main_json = require('./test-data/USR_MAIN.json');
+const ftk_bulkfuel_json = require('./test-data/FTK_bulkfuel.json');
 
 async function importData(){
-    await prisma.user.createMany({
-        data: userData,
-        skipDuplicates: true,
-    })
+    // Insert testing USR_MAIN into DB
     await prisma.uSR_MAIN.createMany({
-        data: usrMainData,
-        skipDuplicates: true,
-      })
-    await prisma.lOC_MAIN.createMany({
-        data: fuelSitesData,
+        data: usr_main_json,
         skipDuplicates: true,
     })
+
+    // Insert testing LOC_MAIN into DB
+    await prisma.lOC_MAIN.createMany({
+        data: loc_main_json,
+        skipDuplicates: true,
+    })
+
+    // Insert testing FTK_bulkfuel into DB
     await prisma.fTK_bulkfuel.createMany({
-        data: bulkFuelData,
+        data: ftk_bulkfuel_json,
         skipDuplicates: true,
     })
 }
