@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 
 // Enable revalidation for static output
 export const revalidate = 60; // Revalidate every 60 seconds
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
     const fuelSites = await prisma.lOC_MAIN.findMany();
