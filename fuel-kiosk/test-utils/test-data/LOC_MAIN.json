@@ -1,0 +1,74 @@
+[
+    {
+        "LOC_loc_code": "ADMIN",
+        "name": "FUEL SITE ADMINISTRATOR",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "CBARC-M",
+        "name": "COLUMBIA BASIN AG RESEARCH-MOR",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "CBARC-P",
+        "name": "COLUMBIA BASIN AG RESEARCH-PEN",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "COAREC",
+        "name": "CENTRAL OREGON AG RES EXT",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "DAIRY",
+        "name": "CORVALLIS",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "EOARC-B",
+        "name": "EASTERN OREGON AG RESEARCH",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "EOARC-U",
+        "name": "EASTERN OREGON AG RESEARCH",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "HAREC",
+        "name": "HERMISTON AG RESEARCH STATION",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "KBREC",
+        "name": "KLAMATH BASIN EXPERIMENT STA",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "MES",
+        "name": "MALHEUR EXPERIMENT STATION",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "SOREC",
+        "name": "SOUTHERN OREGON RES EXT CTR",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    },
+    {
+        "LOC_loc_code": "NWREC",
+        "name": "NORTH WILLAMETTE RES EXTEN CTR",
+        "email_addr": "fueldepot@example.com",
+        "is_fuel_site": true
+    }
+]

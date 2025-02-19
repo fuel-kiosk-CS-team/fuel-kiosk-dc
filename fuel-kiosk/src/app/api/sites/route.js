@@ -1,25 +1,13 @@
 // app/api/sites/route.js
 
+import { prisma } from '../../../lib/prisma';
 import { NextResponse } from 'next/server';
 
 // Enable revalidation for static output
 export const revalidate = 60; // Revalidate every 60 seconds
 
 export async function GET() {
-    const fuelSites = [
-        { value: 'site-1', label: 'ADMIN--FUEL SITE ADMINISTRATOR', route: '/admin'},
-        { value: 'site-2', label: 'CBARC-M--COLUMBIA BASIN AG RESEARCH-MOR' },
-        { value: 'site-3', label: 'CBARC-P--COLUMBIA BASIN AG RESEARCH-PEN' },
-        { value: 'site-4', label: 'COAREC--CENTRAL OREGON AG RES EXT' },
-        { value: 'site-5', label: 'DAIRY--CORVALLIS' },
-        { value: 'site-6', label: 'EOARC-B--EASTERN OREGON AG RESEARCH' },
-        { value: 'site-7', label: 'EOARC-U--EASTERN OREGON AG RESEARCH' },
-        { value: 'site-8', label: 'HAREC--HERMISTON AG RESEARCH STATION' },
-        { value: 'site-9', label: 'KBREC--KLAMATH BASIN EXPERIMENT STA' },
-        { value: 'site-10', label: 'MES--MALHEUR EXPERIMENT STATION' },
-        { value: 'site-11', label: 'NWREC--NORTH WILLAMETTE RES EXTEN CTR' },
-        { value: 'site-12', label: 'SOREC--SOUTHERN OREGON RES EXT CTR' },
-    ];
+    const fuelSites = await prisma.lOC_MAIN.findMany();
 
     return NextResponse.json(fuelSites);
 }
@@ -64,7 +52,7 @@ it was used as follows:
 </cfif>
 
 
-Basically, the motorpool_logins query checks if the provided username 
+Basically, the motorpool_logins query checks if the provided username
 and password match a user in t he database. IF a valid user is found
 the oper_oper_no is stored as their role and is used as their login name.
 If the user has roles, they're logged in and I would assume gives access to rest of
@@ -82,13 +70,13 @@ href link used for inserting:
 https://apps.motorpool.oregonstate.edu/apps/motorpool
 */
 
-// Below is the ColdFusion code that 
+// Below is the ColdFusion code that
 
 /*
 <cfquery datasource="proto" name="locations">
     select LOC_loc_code, name, email_addr
-    from LOC_MAIN 
-    where (emsdba.LOC_MAIN.is_fuel_site = 'Y') 
+    from LOC_MAIN
+    where (emsdba.LOC_MAIN.is_fuel_site = 'Y')
     and loc_loc_code not in ('30','50')
     order by loc_loc_code;
 </cfquery>

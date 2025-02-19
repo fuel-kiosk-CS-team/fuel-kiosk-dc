@@ -27,9 +27,14 @@ export function Login(){
                 try {
                     const response = await fetch('/api/sites');
                     if (response.ok) {
-                        const data = await response.json();
-                        setSiteData(data);
-                        localStorage.setItem('siteData', JSON.stringify(data)); // Cache data locally
+                        const sites = await response.json();
+                        let formattedSites = sites.map(site => ({
+                            value: site.LOC_loc_code,
+                            label: `${site.LOC_loc_code}--${site.name}`
+                        }));
+
+                        setSiteData(formattedSites);
+                        localStorage.setItem('siteData', JSON.stringify(formattedSites)); // Cache data locally
                     } else {
                         console.error("Failed to fetch data from server.");
                     }
@@ -66,9 +71,8 @@ export function Login(){
           alert("Selected fuel site not found!");
           return;
         }
-      
-        const route = selectedFuelSite.route || `/sites/${selectedFuelSite.value}`;
-        router.push(route);
+
+        router.push(`/sites/${selectedFuelSite.value}`);
     }
 
     return (

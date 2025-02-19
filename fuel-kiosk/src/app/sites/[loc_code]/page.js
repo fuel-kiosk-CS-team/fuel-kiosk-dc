@@ -19,7 +19,7 @@ import { FuelEntryForm } from '../../components/fuelentry/FuelEntryForm';
 export default function FuelSitePage({ params: paramsPromise }) {
     const router = useRouter();
     const params = use(paramsPromise);
-    const { siteId } = params;
+    const { loc_code } = params;
 
     const [step, setStep] = useState('SELECT_FUEL');
     const [selectedFuelType, setSelectedFuelType] = useState(null);
@@ -31,18 +31,16 @@ export default function FuelSitePage({ params: paramsPromise }) {
     useEffect(() => {
         const fetchSiteInfo = async () => {
             try {
-                console.log('Fetching for siteId:', siteId);
+                console.log('Fetching for loc_code:', loc_code);
                 const response = await fetch('/api/sites');
                 const sites = await response.json();
                 console.log('Sites from API:', sites);
 
-                const site = sites.find((s) => s.value === siteId);
+                const site = sites.find((s) => s.LOC_loc_code === loc_code);
                 console.log('Found site:', site);
 
                 if (!site) {
                     setError('Site not found');
-                } else if (site.route) {
-                    router.push(site.route);
                 } else {
                     setSiteInfo(site);
                 }
@@ -55,7 +53,7 @@ export default function FuelSitePage({ params: paramsPromise }) {
         };
 
         fetchSiteInfo();
-    }, [siteId, router]);
+    }, [loc_code, router]);
 
     if (loading) {
         return (
@@ -74,7 +72,7 @@ export default function FuelSitePage({ params: paramsPromise }) {
                     </Alert>
                     <Paper shadow="xs" p="md">
                         <Title order={4}>Debug Information:</Title>
-                        <Text>Requested Site ID: {siteId}</Text>
+                        <Text>Requested Site ID: {loc_code}</Text>
                     </Paper>
                     <Button onClick={() => router.push('/')}>Return to Home</Button>
                 </Stack>
@@ -86,7 +84,7 @@ export default function FuelSitePage({ params: paramsPromise }) {
         <Container size="sm" p="md">
             {siteInfo ? (
                 <Stack spacing="lg">
-                    <Title order={1}>{siteInfo.label}</Title>
+                    <Title order={1}>{siteInfo.LOC_loc_code}--{siteInfo.name}</Title>
 
                     {step === 'SELECT_FUEL' && (
                         <Stack spacing="md">
