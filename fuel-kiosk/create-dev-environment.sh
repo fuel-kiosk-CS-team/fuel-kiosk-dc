@@ -3,6 +3,19 @@
 # Make it so that any errors fail the script
 set -e
 
+# Check if openssl is installed
+if ! command -v openssl &> /dev/null; then
+    echo "ERROR: openssl is not installed. Please install it using your system's corresponding package manager before running this script."
+    echo
+    echo "For example:"
+    echo
+    echo "Arch: pacman -S openssl"
+    echo "Ubuntu: apt get install openssl"
+    echo
+
+    exit 1
+fi
+
 # Function to check if the MySQL container is running
 is_mysql_running() {
     docker ps --filter "name=fuel-kiosk-db" --filter "status=running" --format "{{.Names}}" | grep -q "fuel-kiosk-db"
@@ -19,8 +32,9 @@ else
     sleep 10
 fi
 
-# Setup DB connection URL for prisma
+# Setup DB connection URL for prisma and Secret Key for Sessions
 export DATABASE_URL=mysql://root:root@localhost:3306/fuel-kiosk?connection_limit=2
+export SECRET_KEY=$(openssl rand -base64 32)
 
 # Ensure all packages are installed
 echo "Installing Packages..."
@@ -44,4 +58,5 @@ fi
 
 # Setup connection URL in env file
 echo "export DATABASE_URL=$DATABASE_URL" > .dev.env
+echo "export SECRET_KEY=$SECRET_KEY" >> .dev.env
 echo "IMPORTANT: Before you run \`npm run dev\` you need to run \`source .dev.env\` which will set the db connection URL"

@@ -1,4 +1,5 @@
 export const revalidate = 0; // Forces regeneration on every request
+
 export async function GET(request) {
   return new Response(
     JSON.stringify({

@@ -65,6 +65,14 @@ export function NavbarSimple({ setPage }) {
         </a>
     ));
 
+    const logout = async () => {
+        const response = await fetch('/api/auth/logout')
+
+        if (response.ok) {
+            router.push('/')
+        }
+    }
+
     return (
         <nav className={classes.navbar}>
             <div className={classes.navbarMain}>
@@ -75,10 +83,7 @@ export function NavbarSimple({ setPage }) {
             </div>
 
             <div className={classes.footer}>
-                <a href="#" className={classes.link} onClick={(event) => {
-                    event.preventDefault()
-                    router.push('/')
-                }}>
+                <a href="#" className={classes.link} onClick={logout}>
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>Logout</span>
                 </a>

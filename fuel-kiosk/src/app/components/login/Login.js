@@ -52,7 +52,7 @@ export function Login(){
     // so basically authenticate, then we'll just use the selectedFuelSite val to navigate to input-form ?
     // This way we can reduce the hydration errors.
     // Also think input form should just leave the date/datetime to server once it's submitted.
-    const handleSubmit = (event) => {
+    const login = async (event) => {
         event.preventDefault();
 
         // Validate basic requirements of password and selection
@@ -72,6 +72,17 @@ export function Login(){
           return;
         }
 
+        try {
+            await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: selectedFuelSite.value, password: password })
+            });
+        } catch (error) {
+            alert("Failed to authenticate!");
+            return
+        }
+
         if (selectedFuelSite.value === 'ADMIN') {
             router.push("/admin");
         } else {
@@ -81,7 +92,7 @@ export function Login(){
 
     return (
         <form
-            onSubmit={handleSubmit}
+            onSubmit={login}
 
         >
             {/* Bulk Fuel Site Selection */}

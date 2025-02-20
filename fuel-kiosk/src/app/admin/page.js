@@ -58,30 +58,12 @@ export default function Admin() {
                                         value={totalizerValue}
                                         onVerify={(verified) => {
                                             if (verified) {
-                                                setStep('ENTRY_FORM');
+                                                setStep('SELECT_FUEL');
                                             } else {
                                                 alert('Please contact administrator for assistance');
                                             }
                                         }}
                                         onBack={() => setStep('SELECT_FUEL')}
-                                    />
-                                </Stack>
-                            )}
-
-                            {step === 'ENTRY_FORM' && (
-                                <Stack spacing="md">
-                                    <Title order={2}>Fuel Site Entry Log</Title>
-                                    <FuelEntryForm
-                                        siteInfo={selectedPage}
-                                        initialValues={{
-                                            totalizerStart: totalizerValue,
-                                            fuelType: selectedFuelType,
-                                        }}
-                                        onSubmit={(data) => {
-                                            console.log('Form submitted:', data);
-                                            setStep('SELECT_FUEL');
-                                            setSelectedFuelType(null);
-                                        }}
                                     />
                                 </Stack>
                             )}

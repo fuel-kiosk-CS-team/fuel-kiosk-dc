@@ -15,6 +15,14 @@ export function FuelTypeSelector({ onSelect, selectedType }) {
 
     const router = useRouter();
 
+    const logout = async () => {
+        const response = await fetch('/api/auth/logout')
+
+        if (response.ok) {
+            router.push('/')
+        }
+    }
+
     return (
         <Stack>
             <Group position="center" spacing="sm">
@@ -29,7 +37,7 @@ export function FuelTypeSelector({ onSelect, selectedType }) {
                 ))}
             </Group>
             <Button onClick={() => router.push('/transactions')}>View Transaction Records</Button>
-            <Button onClick={() => router.push('/')}>Logout</Button>
+            <Button onClick={logout}>Logout</Button>
         </Stack>
     );
 }
