@@ -4,23 +4,28 @@ import { createSession } from '../../../../lib/session';
 
 // Enable revalidation for static output
 export const revalidate = 60; // Revalidate every 60 seconds
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
-    const data = await req.json()
+    try {
+        const data = await req.json();
 
-    const results = await prisma.uSR_MAIN.findFirst({
-        where: {
-            USR_userid: data.userId,
-            disabled_reason: data.password,
-        },
-    });
+        if (!data.userId || !data.password) {
+            return NextResponse.json({ error: "Missing userId or password" }, { status: 400 });
+        }
 
-    if (results) {
-        await createSession(data.userId)
-        return NextResponse.json({}, { status: 200 })
+        const user = await prisma.uSR_MAIN.findUnique({
+            where: { USR_userid: data.userId },
+        });
+
+        if (!user || user.disabled_reason !== data.password) {
+            return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+        }
+
+        await createSession(data.userId);
+        return NextResponse.json({ message: "Login successful" }, { status: 200 });
+    } catch (error) {
+        console.error("Login error:", error);
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
-
-    return NextResponse.json({}, { status: 401 });
 }
-

@@ -59,4 +59,4 @@ fi
 # Setup connection URL in env file
 echo "export DATABASE_URL=$DATABASE_URL" > .dev.env
 echo "export SECRET_KEY=$SECRET_KEY" >> .dev.env
-echo "IMPORTANT: Before you run \`npm run dev\` you need to run \`source .dev.env\` which will set the db connection URL"
+echo "IMPORTANT: Before you run \`npm run dev\` you may need to run \`source .dev.env\` which will set the important envs"

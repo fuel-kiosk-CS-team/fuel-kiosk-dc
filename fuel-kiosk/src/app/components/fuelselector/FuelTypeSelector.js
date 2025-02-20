@@ -16,10 +16,16 @@ export function FuelTypeSelector({ onSelect, selectedType }) {
     const router = useRouter();
 
     const logout = async () => {
-        const response = await fetch('/api/auth/logout')
+        try {
+            const response = await fetch('/api/auth/logout');
 
-        if (response.ok) {
-            router.push('/')
+            if (!response.ok) {
+                throw new Error("Logout failed");
+            }
+        } catch (error) {
+            alert(error.message || "Error logging out");
+        } finally {
+            router.push('/');
         }
     }
 

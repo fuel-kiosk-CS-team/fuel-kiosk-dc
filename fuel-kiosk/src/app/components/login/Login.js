@@ -47,6 +47,26 @@ export function Login(){
     }, []);
 
 
+    const validateInputs = (selectedSite, password, siteData) => {
+        if (!selectedSite) {
+            alert("Please select a fuel site!");
+            return false;
+        }
+
+        if (!password.trim()) {
+            alert("Please enter a password!");
+            return false;
+        }
+
+        const selectedFuelSite = siteData.find(site => site.value === selectedSite);
+        if (!selectedFuelSite) {
+            alert("Selected fuel site not found!");
+            return false;
+        }
+
+        return selectedFuelSite;
+    };
+
     // Temporary handle function for submitting login information - basic checks
     // I think we're going to want this to validate the login information is correct
     // so basically authenticate, then we'll just use the selectedFuelSite val to navigate to input-form ?
@@ -55,40 +75,26 @@ export function Login(){
     const login = async (event) => {
         event.preventDefault();
 
-        // Validate basic requirements of password and selection
-        if(!selectedSite){
-            alert("Please select a fuel site!");
-            return;
-        }
-
-        if(password.trim() === '') {
-            alert("Please enter a password!");
-            return;
-        }
-
-        const selectedFuelSite = siteData.find(site => site.value === selectedSite);
-        if (!selectedFuelSite) {
-          alert("Selected fuel site not found!");
-          return;
-        }
+        const selectedFuelSite = validateInputs(selectedSite, password, siteData);
+        if (!selectedFuelSite) return;
 
         try {
-            await fetch('/api/auth/login', {
+            const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: selectedFuelSite.value, password: password })
+                body: JSON.stringify({ userId: selectedFuelSite.value, password })
             });
-        } catch (error) {
-            alert("Failed to authenticate!");
-            return
-        }
 
-        if (selectedFuelSite.value === 'ADMIN') {
-            router.push("/admin");
-        } else {
-            router.push(`/sites/${selectedFuelSite.value}`);
+            if (!response.ok) {
+                throw new Error("Authentication failed");
+            }
+
+            const destination = selectedFuelSite.value === 'ADMIN' ? "/admin" : `/sites/${selectedFuelSite.value}`;
+            router.push(destination);
+        } catch (error) {
+            alert(error.message || "Failed to authenticate!");
         }
-    }
+    };
 
     return (
         <form

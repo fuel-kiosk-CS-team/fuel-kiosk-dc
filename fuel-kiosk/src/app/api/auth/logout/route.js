@@ -1,4 +1,3 @@
-import { prisma } from '../../../../lib/prisma';
 import { NextResponse } from 'next/server';
 import { deleteSession } from '../../../../lib/session';
 
@@ -6,12 +5,12 @@ import { deleteSession } from '../../../../lib/session';
 export const revalidate = 60; // Revalidate every 60 seconds
 export const dynamic = 'force-dynamic'
 
-export async function GET(req) {
+export async function GET() {
     try {
-        await deleteSession()
-        return NextResponse.json({}, { status: 200 });
-
+        await deleteSession();
+        return NextResponse.json({ message: "Logout successful" }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({}, { status: 500 });
+        console.error("Logout error:", error);
+        return NextResponse.json({ error: "Failed to logout" }, { status: 500 });
     }
 }
