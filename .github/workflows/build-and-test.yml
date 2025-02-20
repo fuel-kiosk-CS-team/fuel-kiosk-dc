@@ -1,20 +1,27 @@
 name: Build Test Fuel Kiosk Web Application
 on:
-    workflow_call:
+  workflow_call:
 jobs:
-    build-and-test:
-        runs-on: ubuntu-latest
-        defaults:
-            run:
-                working-directory: ./fuel-kiosk
-        steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
-              with:
-                node-version: 22
-            - run: npm ci
-            - run: npx prisma generate
-              working-directory: ./fuel-kiosk/src
-            - run: npm run build
-            - run: npm run test:unit-and-integration
-            - run: npm run test:e2e
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./fuel-kiosk
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 22
+        continue-on-error: false
+      - name: "Setup Dev Environment"
+        run: ./create-dev-environment.sh
+        env:
+          CI: true
+      - name: "Build Optimized App"
+        run: npm run build
+      - name: "Run Unit and Integration Tests"
+        run: npm run test:unit-and-integration
+      - name: "Run End to End Tests"
+        run: |
+          source .dev.env
+          npm run test:e2e

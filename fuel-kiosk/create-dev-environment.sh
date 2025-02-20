@@ -38,7 +38,15 @@ export SECRET_KEY=$(openssl rand -base64 32)
 
 # Ensure all packages are installed
 echo "Installing Packages..."
-npm install || (echo "ERROR: problem installing npm packages"; exit 1)
+
+# Check if this is running in CI then do clean install
+if [ "$CI" = "true" ]; then
+    echo "CI environment detected. Running npm ci..."
+    npm ci || (echo "ERROR: problem installing npm packages with npm ci"; exit 1)
+else
+    echo "CI environment not detected. Running npm install..."
+    npm install || (echo "ERROR: problem installing npm packages"; exit 1)
+fi
 
 # Setup prisma cache and migrate db
 pushd src

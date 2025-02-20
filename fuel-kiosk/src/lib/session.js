@@ -23,6 +23,7 @@ export async function decrypt(session) {
         return payload
     } catch (error) {
         console.log(error.message || 'Failed to verify session')
+        throw error
     }
 }
 

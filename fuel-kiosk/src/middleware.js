@@ -4,11 +4,13 @@ import { cookies } from 'next/headers'
 
 export default async function middleware(req) {
     const path = req.nextUrl.pathname
+    let userId = undefined
 
     const cookie = (await cookies()).get('session')?.value
-    const session = await decrypt(cookie)
-
-    const userId = session?.userId
+    if(cookie) {
+        const session = await decrypt(cookie)
+        userId = session.userId
+    }
 
     if (!userId && path !== '/') {
         return NextResponse.redirect(new URL('/', req.nextUrl))
