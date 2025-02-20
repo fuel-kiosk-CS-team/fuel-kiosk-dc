@@ -39,7 +39,7 @@ export default function FuelSitePage({ params: paramsPromise }) {
                 const site = sites.find((s) => s.LOC_loc_code === loc_code);
                 console.log('Found site:', site);
 
-                if (!site) {
+                if (!site || site.LOC_loc_code === 'ADMIN') {
                     setError('Site not found');
                 } else {
                     setSiteInfo(site);

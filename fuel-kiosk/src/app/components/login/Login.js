@@ -72,7 +72,11 @@ export function Login(){
           return;
         }
 
-        router.push(`/sites/${selectedFuelSite.value}`);
+        if (selectedFuelSite.value === 'ADMIN') {
+            router.push("/admin");
+        } else {
+            router.push(`/sites/${selectedFuelSite.value}`);
+        }
     }
 
     return (
