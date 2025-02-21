@@ -40,7 +40,7 @@ export SECRET_KEY=$(openssl rand -base64 32)
 echo "Installing Packages..."
 
 # Check if this is running in CI then do clean install
-if [ "$CI" = "true" ]; then
+if [ -n "$CI" ]; then
     echo "CI environment detected. Running npm ci..."
     npm ci || (echo "ERROR: problem installing npm packages with npm ci"; exit 1)
 else
@@ -67,4 +67,17 @@ fi
 # Setup connection URL in env file
 echo "export DATABASE_URL=$DATABASE_URL" > .dev.env
 echo "export SECRET_KEY=$SECRET_KEY" >> .dev.env
+
+echo >> .dev.env
+
+if [ -z "$EMAIL_USER" ] || [ -z "$EMAIL_PASSWORD" ]; then
+    echo "export EMAIL_USER=<<Put in your ONID username>>" >> .dev.env
+    echo "export EMAIL_PASSWORD=<<Put in your ONID password>>" >> .dev.env
+
+    echo "IMPORTANT: Emails won't work until you set your respective email credentials in the .dev.env file and source it"
+else
+    echo "export EMAIL_USER=$EMAIL_USER" >> .dev.env
+    echo "export EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .dev.env
+fi
+
 echo "IMPORTANT: Before you run \`npm run dev\` you may need to run \`source .dev.env\` which will set the important envs"
