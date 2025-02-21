@@ -15,6 +15,20 @@ export function FuelTypeSelector({ onSelect, selectedType }) {
 
     const router = useRouter();
 
+    const logout = async () => {
+        try {
+            const response = await fetch('/api/auth/logout');
+
+            if (!response.ok) {
+                throw new Error("Logout failed");
+            }
+        } catch (error) {
+            alert(error.message || "Error logging out");
+        } finally {
+            router.push('/');
+        }
+    }
+
     return (
         <Stack>
             <Group position="center" spacing="sm">
@@ -29,7 +43,7 @@ export function FuelTypeSelector({ onSelect, selectedType }) {
                 ))}
             </Group>
             <Button onClick={() => router.push('/transactions')}>View Transaction Records</Button>
-            <Button onClick={() => router.push('/')}>Logout</Button>
+            <Button onClick={logout}>Logout</Button>
         </Stack>
     );
 }

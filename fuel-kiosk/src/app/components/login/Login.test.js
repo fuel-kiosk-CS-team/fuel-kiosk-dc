@@ -2,6 +2,12 @@ import { render, screen } from '../../../../test-utils';
 import { fireEvent } from '@testing-library/react'
 import { Login } from './Login';
 
+const fuelSites = require('../../../../test-utils/test-data/LOC_MAIN.json')
+const formattedSites = fuelSites.map(site => ({
+    value: site.LOC_loc_code,
+    label: `${site.LOC_loc_code}--${site.name}`
+}));
+
 jest.mock("next/navigation", () => ({
     useRouter: () => ({
         push: jest.fn(),
@@ -10,12 +16,6 @@ jest.mock("next/navigation", () => ({
 }));
 
 describe('Login Component', () => {
-    const fuelSitesMock = [
-        { value: 'site1', label: 'Site One' },
-        { value: 'site2', label: 'Site Two' },
-        { value: 'site3', label: 'Site Three' },
-    ];
-
     // Mock Fetch API
     beforeEach(() => {
         global.fetch = jest.fn(() =>
@@ -23,6 +23,8 @@ describe('Login Component', () => {
                 json: () => Promise.resolve({ success: true }),
             })
         );
+
+        localStorage.setItem('siteData', JSON.stringify(formattedSites));
     });
 
     afterEach(() => {

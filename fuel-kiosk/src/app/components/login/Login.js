@@ -47,37 +47,58 @@ export function Login(){
     }, []);
 
 
+    const validateInputs = (selectedSite, password, siteData) => {
+        if (!selectedSite) {
+            alert("Please select a fuel site!");
+            return false;
+        }
+
+        if (!password.trim()) {
+            alert("Please enter a password!");
+            return false;
+        }
+
+        const selectedFuelSite = siteData.find(site => site.value === selectedSite);
+        if (!selectedFuelSite) {
+            alert("Selected fuel site not found!");
+            return false;
+        }
+
+        return selectedFuelSite;
+    };
+
     // Temporary handle function for submitting login information - basic checks
     // I think we're going to want this to validate the login information is correct
     // so basically authenticate, then we'll just use the selectedFuelSite val to navigate to input-form ?
     // This way we can reduce the hydration errors.
     // Also think input form should just leave the date/datetime to server once it's submitted.
-    const handleSubmit = (event) => {
+    const login = async (event) => {
         event.preventDefault();
 
-        // Validate basic requirements of password and selection
-        if(!selectedSite){
-            alert("Please select a fuel site!");
-            return;
-        }
+        const selectedFuelSite = validateInputs(selectedSite, password, siteData);
+        if (!selectedFuelSite) return;
 
-        if(password.trim() === '') {
-            alert("Please enter a password!");
-            return;
-        }
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: selectedFuelSite.value, password })
+            });
 
-        const selectedFuelSite = siteData.find(site => site.value === selectedSite);
-        if (!selectedFuelSite) {
-          alert("Selected fuel site not found!");
-          return;
-        }
+            if (!response.ok) {
+                throw new Error("Authentication failed");
+            }
 
-        router.push(`/sites/${selectedFuelSite.value}`);
-    }
+            const destination = selectedFuelSite.value === 'ADMIN' ? "/admin" : `/sites/${selectedFuelSite.value}`;
+            router.push(destination);
+        } catch (error) {
+            alert(error.message || "Failed to authenticate!");
+        }
+    };
 
     return (
         <form
-            onSubmit={handleSubmit}
+            onSubmit={login}
 
         >
             {/* Bulk Fuel Site Selection */}

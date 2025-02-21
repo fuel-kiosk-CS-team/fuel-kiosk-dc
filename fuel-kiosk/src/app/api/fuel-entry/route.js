@@ -4,7 +4,6 @@ import { prisma } from '../../../lib/prisma';
 export async function POST(request) {
     try {
         const body = await request.json();
-        console.log("Received payload:", body);
 
         // Validate that the provided loc_code exists in LOC_MAIN.
         const location = await prisma.lOC_MAIN.findUnique({

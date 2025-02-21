@@ -1,7 +1,14 @@
 describe('Fuel Entry Form', () => {
     beforeEach(() => {
-        // TODO: login functionality
-        cy.visit('/sites/site-2');
+        // sign-in to page
+        cy.request('POST', '/api/auth/login', {
+            userId: 'CBARC-M',
+            password: '5678'
+        }).then((response) => {
+                expect(response.status).to.eq(200);
+        });
+
+        cy.visit('/sites/CBARC-M');
 
         cy.contains('Select Fuel Type').should('be.visible');
         cy.contains('DSL').click();
