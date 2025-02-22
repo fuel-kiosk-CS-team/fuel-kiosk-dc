@@ -9,7 +9,6 @@ export const dynamic = 'force-dynamic';
 export async function POST(req) {
     try {
         const emailInfo = await req.json();
-        console.log(emailInfo);
         sendFuelTicketEmail(emailInfo.to, emailInfo.data);
         return NextResponse.json({ message: "Email Sent Successfully" }, { status: 200 });
     } catch (error) {

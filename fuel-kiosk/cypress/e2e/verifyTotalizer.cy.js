@@ -31,17 +31,16 @@ describe('Fuel Kiosk Totalizer Verification Flow', () => {
         cy.contains('Fuel Site Entry Log').should('be.visible');
     });
 
-    it('alerts and stays on verification page when NO is clicked', () => {
+    it('generates email alert and goes to fuel entry form when NO is clicked', () => {
         cy.contains('DSL').click();
 
         const alertStub = cy.stub();
         cy.on('window:alert', alertStub);
 
-        cy.contains('NO').click().then(() => {
-            expect(alertStub).to.have.been.calledWith('Please contact administrator for assistance');
-        });
+        cy.contains('NO').click()
 
-        cy.contains('Verify Totalizer').should('be.visible');
+        cy.contains('Fuel Site Entry Log').should('be.visible');
+        cy.contains('An email alert was generated.').should('be.visible');
     });
 
     it('returns to fuel type selection when BACK is clicked', () => {

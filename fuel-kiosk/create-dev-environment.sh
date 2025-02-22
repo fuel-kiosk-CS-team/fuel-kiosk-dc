@@ -71,8 +71,8 @@ echo "export SECRET_KEY=$SECRET_KEY" >> .dev.env
 echo >> .dev.env
 
 if [ -z "$EMAIL_USER" ] || [ -z "$EMAIL_PASSWORD" ]; then
-    echo "export EMAIL_USER=<<Put in your ONID username>>" >> .dev.env
-    echo "export EMAIL_PASSWORD=<<Put in your ONID password>>" >> .dev.env
+    echo "export EMAIL_USER=\"Put in your ONID username\"" >> .dev.env
+    echo "export EMAIL_PASSWORD=\"Put in your ONID password\"" >> .dev.env
 
     echo "IMPORTANT: Emails won't work until you set your respective email credentials in the .dev.env file and source it"
 else
