@@ -13,7 +13,6 @@ import { NavbarSimple } from "./components/navbar/NavbarSimple";
 
 import { AdminTotalizerVerification } from './components/admintotalizer/AdminTotalizerVerification';
 import { FuelTypeSelector } from "../components/fuelselector/FuelTypeSelector";
-import { FuelEntryForm } from '../components/fuelentry/FuelEntryForm';
 
 import classes from "./admin.module.css";
 

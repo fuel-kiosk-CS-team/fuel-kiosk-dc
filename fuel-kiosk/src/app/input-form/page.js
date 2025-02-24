@@ -13,16 +13,16 @@ async function fetchFuelData() {
         return data;
     } else{
         return (123.45, ['Site A', 'Site B', 'Site C'])
-               
-            
-          
+
+
+
     }
 
   } catch(error) {
     console.error("Error fetching fuel data", error)
   }
   return (123.45, ['Site A', 'Site B', 'Site C'])
-  
+
 }
 
 export default async function Page() {
@@ -30,7 +30,6 @@ export default async function Page() {
   const { previousMax, fuelSites } = await fetchFuelData();
 
   const handleFormSubmit = (formData) => {
-    console.log('Form submitted with data:', formData);
     // Example: send formData to your backend
     fetch('/api/submit-fuel-data', {
       method: 'POST',

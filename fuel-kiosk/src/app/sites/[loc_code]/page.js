@@ -12,6 +12,7 @@ import {
     Stack,
     Text,
 } from '@mantine/core';
+
 import { FuelTypeSelector } from '../../components/fuelselector/FuelTypeSelector';
 import { TotalizerVerification } from '../../components/totalizer/TotalizerVerification';
 import { FuelEntryForm } from '../../components/fuelentry/FuelEntryForm';
@@ -19,25 +20,27 @@ import { FuelEntryForm } from '../../components/fuelentry/FuelEntryForm';
 export default function FuelSitePage({ params: paramsPromise }) {
     const router = useRouter();
     const params = use(paramsPromise);
+
     const { loc_code } = params;
 
     const [step, setStep] = useState('SELECT_FUEL');
+    const [resetTotalizer, setResetTotalizer] = useState(false);
+
     const [selectedFuelType, setSelectedFuelType] = useState(null);
     const [totalizerValue, setTotalizerValue] = useState('0.3');
+
     const [siteInfo, setSiteInfo] = useState(null);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchSiteInfo = async () => {
             try {
-                console.log('Fetching for loc_code:', loc_code);
                 const response = await fetch('/api/sites');
                 const sites = await response.json();
-                console.log('Sites from API:', sites);
 
                 const site = sites.find((s) => s.LOC_loc_code === loc_code);
-                console.log('Found site:', site);
 
                 if (!site || site.LOC_loc_code === 'ADMIN') {
                     setError('Site not found');
@@ -45,7 +48,6 @@ export default function FuelSitePage({ params: paramsPromise }) {
                     setSiteInfo(site);
                 }
             } catch (error) {
-                console.error('Error:', error);
                 setError('Error loading site information');
             } finally {
                 setLoading(false);
@@ -104,12 +106,29 @@ export default function FuelSitePage({ params: paramsPromise }) {
                             <Title order={2}>Verify Totalizer Reading</Title>
                             <TotalizerVerification
                                 value={totalizerValue}
-                                onVerify={(verified) => {
-                                    if (verified) {
-                                        setStep('ENTRY_FORM');
-                                    } else {
-                                        alert('Please contact administrator for assistance');
+                                onVerify={async (verified) => {
+                                    // Send error Email
+                                    if (!verified) {
+                                        const emailData = {
+                                            to: siteInfo.email_addr,
+                                            data: {
+                                                fuel_site: siteInfo.LOC_loc_code,
+                                                fuel_type: selectedFuelType,
+                                            },
+                                        }
+
+                                        await fetch('/api/email/totalizererror', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json'
+                                            },
+                                            body: JSON.stringify(emailData)
+                                        });
+
+                                        setResetTotalizer(true)
                                     }
+
+                                    setStep('ENTRY_FORM');
                                 }}
                                 onBack={() => setStep('SELECT_FUEL')}
                             />
@@ -121,13 +140,27 @@ export default function FuelSitePage({ params: paramsPromise }) {
                             <Title order={2}>Fuel Site Entry Log</Title>
                             <FuelEntryForm
                                 siteInfo={siteInfo}
+                                resetTotalizer={resetTotalizer}
                                 initialValues={{
                                     totalizerStart: totalizerValue,
                                     fuelType: selectedFuelType,
                                 }}
-                                onSubmit={(data) => {
-                                    console.log('Form submitted:', data);
+                                onSubmit={ async (data) => {
+                                    const emailData = {
+                                        to: siteInfo.email_addr,
+                                        data: data,
+                                    }
+
+                                    await fetch('/api/email/fuelticket', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify(emailData)
+                                    });
+
                                     setStep('SELECT_FUEL');
+                                    setResetTotalizer(false);
                                     setSelectedFuelType(null);
                                 }}
                             />

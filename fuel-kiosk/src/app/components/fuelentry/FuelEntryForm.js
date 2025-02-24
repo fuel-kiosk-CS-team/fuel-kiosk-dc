@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Paper, Stack, TextInput, Select, Group, Button } from '@mantine/core';
 
-export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
+export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTotalizer }) {
     const defaultValues = {
         dateTimeInsert: new Date()
             .toLocaleString('en-US', { hour12: false })
             .replace(/,/g, ''),
         date: new Date().toLocaleDateString(),
-        totalizerStart: '',
+        totalizerStart: (resetTotalizer ? '' : initialValues.totalizerStart),
         fuelSite: `${siteInfo?.LOC_loc_code}--${siteInfo?.name}` || '',
         fuelSiteCode: siteInfo?.LOC_loc_code || '',
         fuelType: '',
@@ -45,8 +45,6 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
                 projectUnit: formData.projectUnit
             };
 
-            //console.log('Submitting data:', dataToSubmit);
-
             const response = await fetch('/api/fuel-entry', {
                 method: 'POST',
                 headers: {
@@ -69,7 +67,6 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
                 throw new Error(result.error || 'Failed to save fuel entry');
             }
         } catch (err) {
-            console.error('Submission error:', err);
             setError(err.message);
         } finally {
             setIsSubmitting(false);
@@ -78,9 +75,9 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
 
     const handleReset = () => {
         setFormData({
-            ...defaultValues,
             dateTimeInsert: new Date().toLocaleString('en-US', { hour12: false }),
             date: new Date().toLocaleDateString(),
+            ...defaultValues,
         });
         setError(null);
     };
@@ -95,28 +92,46 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit }) {
                         </div>
                     )}
 
+                    { resetTotalizer && (
+                        <div>
+                            <h2><p>An email alert was generated.</p></h2>
+                            <p>Please continue and update the starting totalizer reading.</p>
+                        </div>
+                    )}
+
                     <TextInput
                         label="Date/Time Insert"
                         value={formData.dateTimeInsert || ''}
-                        readOnly
+                        disabled
                     />
                     <TextInput
                         label="Date"
                         value={formData.date || ''}
-                        readOnly
+                        disabled
                     />
-                    <TextInput
-                        label="Totalizer Start (xxx.x)"
-                        value={formData.totalizerStart}
-                        onChange={(e) =>
-                            setFormData({ ...formData, totalizerStart: e.target.value })
-                        }
-                        required
-                    />
+                    { resetTotalizer ? (
+                        <TextInput
+                            label="Totalizer Start (xxx.x)"
+                            placeholder='Update Totalizer Start...'
+                            onChange={(e) =>
+                                setFormData({ ...formData, totalizerStart: e.target.value })
+                            }
+                            required
+                        />
+                    ) : (
+                        <TextInput
+                            label="Totalizer Start (xxx.x)"
+                            value={formData.totalizerStart}
+                            onChange={e => e.preventDefault()}
+                            disabled
+                            required
+                        />
+
+                    )}
                     <TextInput
                         label="Fuel Site"
                         value={formData.fuelSite}
-                        readOnly
+                        disabled
                     />
                     <TextInput
                         label="Fuel Type"

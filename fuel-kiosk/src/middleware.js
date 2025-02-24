@@ -16,7 +16,7 @@ export default async function middleware(req) {
         return NextResponse.redirect(new URL('/', req.nextUrl))
     }
 
-    if (userId && userId !== 'ADMIN' && !path.includes(userId)) {
+    if (userId && userId !== 'ADMIN' && !path.includes(userId) && !path.includes('transactions')) {
         return NextResponse.redirect(new URL(`/sites/${userId}`, req.nextUrl))
     }
 

@@ -38,10 +38,10 @@ export function NavbarSimple({ setPage }) {
                         setPage(data[0].label);
                         localStorage.setItem('siteData', JSON.stringify(data));
                     } else {
-                        console.error("Failed to fetch data from server.");
+                        alert("Failed to fetch data from server.");
                     }
                 } catch (error) {
-                    console.error("Error fetching site data:", error);
+                    alert("Error fetching site data:", error);
                 }
             }
         };
