@@ -12,7 +12,7 @@ import {
 import { NavbarSimple } from "./components/navbar/NavbarSimple";
 
 import { AdminTotalizerVerification } from './components/admintotalizer/AdminTotalizerVerification';
-import { FuelTypeSelector } from "../components/fuelselector/FuelTypeSelector";
+import { AdminFuelTypeSelector } from "./components/adminfuelselector/AdminFuelTypeSelector";
 
 import classes from "./admin.module.css";
 
@@ -40,7 +40,7 @@ export default function Admin() {
                             {step === 'SELECT_FUEL' && (
                                 <Stack spacing="md">
                                     <Title order={2}>Select Fuel Type</Title>
-                                    <FuelTypeSelector
+                                    <AdminFuelTypeSelector
                                         selectedType={selectedFuelType}
                                         onSelect={(value) => {
                                             setSelectedFuelType(value);

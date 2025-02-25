@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
     IconLogout,
-    IconMapPin2
+    IconMapPin2,
+    IconClipboardText
 } from '@tabler/icons-react';
 import { Group } from '@mantine/core';
 
@@ -89,6 +90,10 @@ export function NavbarSimple({ setPage }) {
             </div>
 
             <div className={classes.footer}>
+                <a href="" className={classes.link} onClick={() => router.push('/transactions?loc_code=ADMIN')}>
+                    <IconClipboardText className={classes.linkIcon} stroke={1.5} />
+                    <span>Transaction Logs</span>
+                </a>
                 <a href="#" className={classes.link} onClick={logout}>
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>Logout</span>

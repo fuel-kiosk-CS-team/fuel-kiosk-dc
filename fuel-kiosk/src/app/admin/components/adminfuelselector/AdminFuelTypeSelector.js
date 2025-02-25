@@ -3,31 +3,14 @@
 import React from 'react';
 
 import { Stack, Group, Button } from '@mantine/core';
-import { useRouter } from 'next/navigation';
 
-export function FuelTypeSelector({ site, onSelect, selectedType }) {
+export function AdminFuelTypeSelector({ onSelect, selectedType }) {
     const fuelTypes = [
         { id: 'UNL', label: 'UNL' },
         { id: 'DSL', label: 'DSL' },
         { id: 'DSL_OFF_ROAD', label: 'DSL OFF ROAD' },
         { id: 'CLEAR_GAS', label: 'CLEAR GAS' },
     ];
-
-    const router = useRouter();
-
-    const logout = async () => {
-        try {
-            const response = await fetch('/api/auth/logout');
-
-            if (!response.ok) {
-                throw new Error("Logout failed");
-            }
-        } catch (error) {
-            alert(error.message || "Error logging out");
-        } finally {
-            router.push('/');
-        }
-    }
 
     return (
         <Stack>
@@ -42,8 +25,6 @@ export function FuelTypeSelector({ site, onSelect, selectedType }) {
                     </Button>
                 ))}
             </Group>
-            <Button onClick={() => router.push(`/transactions?loc_code=${site}`)}>View Transaction Records</Button>
-            <Button onClick={logout}>Logout</Button>
         </Stack>
     );
 }

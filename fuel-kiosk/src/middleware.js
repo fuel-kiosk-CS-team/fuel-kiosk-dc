@@ -4,6 +4,7 @@ import { cookies } from 'next/headers'
 
 export default async function middleware(req) {
     const path = req.nextUrl.pathname
+    const searchParams = req.nextUrl.searchParams;
     let userId = undefined
 
     const cookie = (await cookies()).get('session')?.value
@@ -16,7 +17,19 @@ export default async function middleware(req) {
         return NextResponse.redirect(new URL('/', req.nextUrl))
     }
 
-    if (userId && userId !== 'ADMIN' && !path.includes(userId) && !path.includes('transactions')) {
+    if (userId && path.includes('/transactions')) {
+        const loc_code = searchParams.get('loc_code');
+
+        if(!loc_code) {
+            return NextResponse.redirect(new URL(`/transactions?loc_code=${userId}`, req.nextUrl))
+        }
+
+        if(loc_code && loc_code === userId) {
+            return NextResponse.next();
+        }
+    }
+
+    if (userId && userId !== 'ADMIN' && !path.includes(userId)) {
         return NextResponse.redirect(new URL(`/sites/${userId}`, req.nextUrl))
     }
 

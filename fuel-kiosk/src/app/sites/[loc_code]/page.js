@@ -92,6 +92,7 @@ export default function FuelSitePage({ params: paramsPromise }) {
                         <Stack spacing="md">
                             <Title order={2}>Select Fuel Type</Title>
                             <FuelTypeSelector
+                                site={siteInfo.LOC_loc_code}
                                 selectedType={selectedFuelType}
                                 onSelect={(value) => {
                                     setSelectedFuelType(value);
