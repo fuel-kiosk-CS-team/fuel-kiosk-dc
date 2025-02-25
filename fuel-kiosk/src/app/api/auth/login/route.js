@@ -9,7 +9,6 @@ export const dynamic = 'force-dynamic';
 export async function POST(req) {
     try {
         const data = await req.json();
-        console.log(data);
 
         if (!data.userId || !data.password) {
             return NextResponse.json({ error: "Missing userId or password" }, { status: 400 });
