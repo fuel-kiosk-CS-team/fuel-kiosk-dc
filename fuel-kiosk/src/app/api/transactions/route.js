@@ -25,7 +25,7 @@ export async function GET(req) {
         }
 
         const loc_code = searchParams.get('loc_code');
-        if(loc_code && loc_code !== userId) {
+        if(userId !== 'ADMIN' && loc_code && loc_code !== userId) {
             return NextResponse.json({ error: "Forbidden: loc_code mismatch" }, { status: 403 });
         }
 

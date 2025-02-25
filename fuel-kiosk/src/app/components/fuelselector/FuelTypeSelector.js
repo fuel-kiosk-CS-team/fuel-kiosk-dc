@@ -5,7 +5,7 @@ import React from 'react';
 import { Stack, Group, Button } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 
-export function FuelTypeSelector({ site, onSelect, selectedType }) {
+export function FuelTypeSelector({ site, onSelect }) {
     const fuelTypes = [
         { id: 'UNL', label: 'UNL' },
         { id: 'DSL', label: 'DSL' },
@@ -36,7 +36,7 @@ export function FuelTypeSelector({ site, onSelect, selectedType }) {
                     <Button
                         key={type.id}
                         onClick={() => onSelect(type.id)}
-                        variant={selectedType === type.id ? 'filled' : 'outline'}
+                        variant={'outline'}
                     >
                         {type.label}
                     </Button>

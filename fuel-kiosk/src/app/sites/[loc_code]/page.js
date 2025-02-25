@@ -27,7 +27,7 @@ export default function FuelSitePage({ params: paramsPromise }) {
     const [resetTotalizer, setResetTotalizer] = useState(false);
 
     const [selectedFuelType, setSelectedFuelType] = useState(null);
-    const [totalizerValue, setTotalizerValue] = useState('0.3');
+    const [totalizerValue, setTotalizerValue] = useState(null);
 
     const [siteInfo, setSiteInfo] = useState(null);
 
@@ -37,10 +37,8 @@ export default function FuelSitePage({ params: paramsPromise }) {
     useEffect(() => {
         const fetchSiteInfo = async () => {
             try {
-                const response = await fetch('/api/sites');
-                const sites = await response.json();
-
-                const site = sites.find((s) => s.LOC_loc_code === loc_code);
+                const response = await fetch(`/api/sites/${loc_code}`);
+                const site = await response.json();
 
                 if (!site || site.LOC_loc_code === 'ADMIN') {
                     setError('Site not found');
@@ -56,6 +54,23 @@ export default function FuelSitePage({ params: paramsPromise }) {
 
         fetchSiteInfo();
     }, [loc_code, router]);
+
+    const updateTotalizerValue = async (fuelType) => {
+        if (!siteInfo || !fuelType) return;
+
+        try {
+            const response = await fetch(`/api/sites/${siteInfo.LOC_loc_code}?fuel_type=${fuelType}&totalizer=true`);
+            const data = await response.json();
+
+            if (data?.FuelTransactions?.length > 0) {
+                setTotalizerValue(data.FuelTransactions[0].totalizer_end);
+            } else {
+                setTotalizerValue('0.0');
+            }
+        } catch (error) {
+            console.error("Error fetching totalizer value:", error);
+        }
+    }
 
     if (loading) {
         return (
@@ -93,9 +108,9 @@ export default function FuelSitePage({ params: paramsPromise }) {
                             <Title order={2}>Select Fuel Type</Title>
                             <FuelTypeSelector
                                 site={siteInfo.LOC_loc_code}
-                                selectedType={selectedFuelType}
-                                onSelect={(value) => {
+                                onSelect={async (value) => {
                                     setSelectedFuelType(value);
+                                    await updateTotalizerValue(value);
                                     setStep('VERIFY_TOTALIZER');
                                 }}
                             />

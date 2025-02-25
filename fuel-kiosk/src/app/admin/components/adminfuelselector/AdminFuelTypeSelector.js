@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Stack, Group, Button } from '@mantine/core';
 
-export function AdminFuelTypeSelector({ onSelect, selectedType }) {
+export function AdminFuelTypeSelector({ onSelect }) {
     const fuelTypes = [
         { id: 'UNL', label: 'UNL' },
         { id: 'DSL', label: 'DSL' },
@@ -19,7 +19,7 @@ export function AdminFuelTypeSelector({ onSelect, selectedType }) {
                     <Button
                         key={type.id}
                         onClick={() => onSelect(type.id)}
-                        variant={selectedType === type.id ? 'filled' : 'outline'}
+                        variant={'filled'}
                     >
                         {type.label}
                     </Button>

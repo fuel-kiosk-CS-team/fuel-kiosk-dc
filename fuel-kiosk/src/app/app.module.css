@@ -1,7 +1,13 @@
 .base {
     margin: 0;
-    height: 100dvh;
+    min-height: 100dvh;
     width: 100dvw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .center {
