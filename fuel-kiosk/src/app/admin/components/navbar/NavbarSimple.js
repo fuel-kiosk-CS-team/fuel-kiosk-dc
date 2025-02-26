@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
     IconLogout,
-    IconMapPin2
+    IconMapPin2,
+    IconClipboardText
 } from '@tabler/icons-react';
 import { Group } from '@mantine/core';
 
 import classes from './NavbarSimple.module.css';
 
-export function NavbarSimple({ setPage }) {
+export function NavbarSimple({ setSite }) {
     const router = useRouter();
 
     const [active, setActive] = useState('');
     const [siteData, setSiteData] = useState([]);
 
-    // Temporary example of how we can get site data - currently using localStorage (likely to be removed or changed soon) or an API call
     useEffect(() => {
         const loadData = async () => {
             const localData = localStorage.getItem('siteData');
@@ -24,18 +24,20 @@ export function NavbarSimple({ setPage }) {
                 // Parse and use local data if available
                 setSiteData(jsonData);
 
-                let firstSite = jsonData.filter(item => item.label !== 'ADMIN--FUEL SITE ADMINISTRATOR')[0].label;
+                let firstSite = jsonData.filter(item => item.LOC_loc_code !== 'ADMIN')[0];
                 setActive(firstSite);
-                setPage(firstSite)
+                setSite(firstSite)
             } else {
                 // Otherwise, fetch from the server
                 try {
                     const response = await fetch('/api/sites');
                     if (response.ok) {
                         const data = await response.json();
+
                         setSiteData(data);
-                        setActive(data[0].label);
-                        setPage(data[0].label);
+                        setActive(data[0]);
+                        setSite(data[0]);
+
                         localStorage.setItem('siteData', JSON.stringify(data));
                     } else {
                         alert("Failed to fetch data from server.");
@@ -48,20 +50,21 @@ export function NavbarSimple({ setPage }) {
         loadData();
     }, []);
 
-    const links = siteData.filter(item => item.label !== 'ADMIN--FUEL SITE ADMINISTRATOR').map((item) => (
+    const links = siteData.filter(item => item.LOC_loc_code !== 'ADMIN').map((item) => (
         <a
             className={classes.link}
-            data-active={item.label === active || undefined}
+            data-active={item.LOC_loc_code === active.LOC_loc_code || undefined}
             href='#'
-            key={item.label}
+            key={`${item.LOC_loc_code}--${item.name}`}
             onClick={(event) => {
                 event.preventDefault();
-                setActive(item.label);
-                setPage(item.label);
+
+                setActive(item);
+                setSite(item);
             }}
         >
             <IconMapPin2 className={classes.linkIcon} stroke={1.5} />
-            <span>{item.label}</span>
+            <span>{item.LOC_loc_code}--{item.name}</span>
         </a>
     ));
 
@@ -89,6 +92,10 @@ export function NavbarSimple({ setPage }) {
             </div>
 
             <div className={classes.footer}>
+                <a href="" className={classes.link} onClick={() => router.push('/transactions?loc_code=ADMIN')}>
+                    <IconClipboardText className={classes.linkIcon} stroke={1.5} />
+                    <span>Transaction Logs</span>
+                </a>
                 <a href="#" className={classes.link} onClick={logout}>
                     <IconLogout className={classes.linkIcon} stroke={1.5} />
                     <span>Logout</span>

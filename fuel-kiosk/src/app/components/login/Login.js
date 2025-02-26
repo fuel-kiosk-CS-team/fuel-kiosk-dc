@@ -28,13 +28,9 @@ export function Login(){
                     const response = await fetch('/api/sites');
                     if (response.ok) {
                         const sites = await response.json();
-                        let formattedSites = sites.map(site => ({
-                            value: site.LOC_loc_code,
-                            label: `${site.LOC_loc_code}--${site.name}`
-                        }));
 
-                        setSiteData(formattedSites);
-                        localStorage.setItem('siteData', JSON.stringify(formattedSites)); // Cache data locally
+                        setSiteData(sites);
+                        localStorage.setItem('siteData', JSON.stringify(sites)); // Cache data locally
                     } else {
                         alert("Failed to fetch data from server.")
                     }
@@ -58,7 +54,7 @@ export function Login(){
             return false;
         }
 
-        const selectedFuelSite = siteData.find(site => site.value === selectedSite);
+        const selectedFuelSite = siteData.find(site => site.LOC_loc_code === selectedSite);
         if (!selectedFuelSite) {
             alert("Selected fuel site not found!");
             return false;
@@ -82,14 +78,14 @@ export function Login(){
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: selectedFuelSite.value, password })
+                body: JSON.stringify({ userId: selectedFuelSite.LOC_loc_code, password })
             });
 
             if (!response.ok) {
                 throw new Error("Authentication failed");
             }
 
-            const destination = selectedFuelSite.value === 'ADMIN' ? "/admin" : `/sites/${selectedFuelSite.value}`;
+            const destination = selectedFuelSite.LOC_loc_code === 'ADMIN' ? "/admin" : `/sites/${selectedFuelSite.value}`;
             router.push(destination);
         } catch (error) {
             alert(error.message || "Failed to authenticate!");
@@ -105,7 +101,10 @@ export function Login(){
             <Select
                 label="Bulk Fuel Site"
                 placeholder="Select:"
-                data={siteData}
+                data={siteData.map(site => ({
+                    value: site.LOC_loc_code,
+                    label: `${site.LOC_loc_code}--${site.name}`,
+                }))}
                 value={selectedSite}
                 onChange={setSelectedSite}
 

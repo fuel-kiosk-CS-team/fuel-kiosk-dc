@@ -3,10 +3,6 @@ import { fireEvent } from '@testing-library/react'
 import { Login } from './Login';
 
 const fuelSites = require('../../../../test-utils/test-data/LOC_MAIN.json')
-const formattedSites = fuelSites.map(site => ({
-    value: site.LOC_loc_code,
-    label: `${site.LOC_loc_code}--${site.name}`
-}));
 
 jest.mock("next/navigation", () => ({
     useRouter: () => ({
@@ -24,7 +20,7 @@ describe('Login Component', () => {
             })
         );
 
-        localStorage.setItem('siteData', JSON.stringify(formattedSites));
+        localStorage.setItem('siteData', JSON.stringify(fuelSites));
     });
 
     afterEach(() => {
