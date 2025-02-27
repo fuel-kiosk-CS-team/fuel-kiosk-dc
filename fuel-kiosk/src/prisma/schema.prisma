@@ -17,6 +17,8 @@
 // Use following link to figure out how to import Prisma Client as needed:
 // https://pris.ly/d/importing-client
 
+
+
 generator client {
     provider = "prisma-client-js"
 }
