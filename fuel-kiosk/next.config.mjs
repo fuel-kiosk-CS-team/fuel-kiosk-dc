@@ -10,13 +10,14 @@ import withPWAInit from 'next-pwa';
 const withPWA = withPWAInit({
     dest: "public",         // destination directory for the PWA files
     // disable: process.env.NODE_ENV === "development",        // disable PWA in the development environment
+    disable: false,
     register: true,         // register the PWA service worker
     skipWaiting: true,      // skip waiting for service worker activation
     reloadOnOnline: true,   // reload the ap when it has gone back online
     fallbacks: {
         // Failed page requests fallback to this - should have page.js file within this folder
         document: "/~offline",
-        // This is for /_next/.../.json files.
+        // This is for /_next/.../.json files - right now : /_next/data/development/fallback.json which doesn't exist, but should have all the site info we'll need for offline
         data: "/fallback.json",
         // images
         image: "/fallback.webp"
@@ -26,10 +27,9 @@ const withPWA = withPWAInit({
 
 const nextConfig = {
     reactStrictMode: true,      // Enable React strict mode for improved error handling
-    swcMinify: true,            // Enable SWC minification for improved performance
     compiler: {
         removeConsole: process.env.NODE_ENV !== "development"     // Remove console.log in production
-    }
+    }  
 };
 
 export default withPWA({
