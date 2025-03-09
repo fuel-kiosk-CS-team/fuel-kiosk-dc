@@ -1,9 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
-const dotenv = require("dotenv")
 dotenv.config();
 
-console.log("DATABASE_URL inside PrismaClient: ", process.env.DATABASE_URL)
-console.log("Not able to get database url lmao wat")
 const prisma = new PrismaClient();
 
 
