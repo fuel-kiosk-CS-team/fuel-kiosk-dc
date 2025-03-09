@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+
 const prisma = new PrismaClient();
 
 const loc_main_json = require('./test-data/LOC_MAIN.json');
