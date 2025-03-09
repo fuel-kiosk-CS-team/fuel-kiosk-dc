@@ -1,8 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
-dotenv.config();
 
 const prisma = new PrismaClient();
-
 
 const loc_main_json = require('./test-data/LOC_MAIN.json');
 const usr_main_json = require('./test-data/USR_MAIN.json');
