@@ -13,7 +13,7 @@ export function FuelFlowStatus({loc_code, site_email_addr}) {
     const [flowStartTimestamp, setFlowStartTimestamp] = useState(0);
 
     function getLookbackDatetime(currentTimestamp) {
-        let lookbackTimestamp = currentTimestamp - 5000//480000;          //8min lookback
+        let lookbackTimestamp = currentTimestamp - 15000//480000;          //8min lookback in ms
         let lookbackDateStart = new Date(lookbackTimestamp);
         //let lookbackDateStart = new Date(lookbackTimestamp - 86400000);         //+ 1 day bc of quirky filter
         let lookbackDateEnd = new Date(lookbackTimestamp + 86400000);
@@ -76,7 +76,7 @@ export function FuelFlowStatus({loc_code, site_email_addr}) {
                         }
                         console.log(JSON.stringify(results));
                     }
-                }, 5000));
+                }, 5000));                  // Timer in ms
             }
             setFlowState(newFlowState['data']);
         });
