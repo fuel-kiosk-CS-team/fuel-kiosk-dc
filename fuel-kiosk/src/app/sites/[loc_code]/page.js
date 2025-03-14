@@ -108,7 +108,7 @@ export default function FuelSitePage({ params: paramsPromise }) {
             {siteInfo ? (
                 <Stack spacing="lg">
                     <Title order={1}>{siteInfo.LOC_loc_code}--{siteInfo.name}</Title>
-                    <FuelFlowStatus loc_code={loc_code}/>
+                    <FuelFlowStatus loc_code={loc_code} site_email_addr={siteInfo.email_addr}/>
                     {step === 'SELECT_FUEL' && (
                         <Stack spacing="md">
                             <Title order={2}>Select Fuel Type</Title>

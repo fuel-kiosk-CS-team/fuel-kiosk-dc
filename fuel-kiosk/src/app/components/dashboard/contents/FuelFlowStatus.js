@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { Button, ActionIcon } from "@mantine/core";
 import { FuelFlowProvider, FuelFlowContext } from "../../context/FuelFlowProvider";
 
-export function FuelFlowStatus({loc_code}) {
+export function FuelFlowStatus({loc_code, site_email_addr}) {
 
     const { socket, timeoutID } = useContext(FuelFlowContext);
     const [socketValue, setSocketValue] = socket;
@@ -10,9 +10,10 @@ export function FuelFlowStatus({loc_code}) {
 
     //const socket = useSocket();
     const [flowState, setFlowState] = useState(0);
+    const [flowStartTimestamp, setFlowStartTimestamp] = useState(0);
 
     function getLookbackDatetime(currentTimestamp) {
-        let lookbackTimestamp = currentTimestamp - 480000;          //8min lookback
+        let lookbackTimestamp = currentTimestamp - 5000//480000;          //8min lookback
         let lookbackDateStart = new Date(lookbackTimestamp);
         //let lookbackDateStart = new Date(lookbackTimestamp - 86400000);         //+ 1 day bc of quirky filter
         let lookbackDateEnd = new Date(lookbackTimestamp + 86400000);
@@ -35,6 +36,8 @@ export function FuelFlowStatus({loc_code}) {
             console.log(`FLOW STATE: ${JSON.stringify(newFlowState)}`);
             
             if ((flowState == 0) && (newFlowState['data'] == 1)) {
+                setFlowStartTimestamp(Date.now());
+                console.log(`FLOW START TIMESTAMP: ${flowStartTimestamp}`);
                 setTimeoutIDValue(setTimeout(async () => {
                     const currentTimestamp = Date.now();
                     const { startDate, endDate, lookbackTimestamp } = getLookbackDatetime(currentTimestamp);
@@ -51,7 +54,22 @@ export function FuelFlowStatus({loc_code}) {
                             })
                             console.log(recentLogs);
                             if (!recentLogs || recentLogs.length === 0) {
-                                alert("Fuel flow - No ticket")
+                                const emailData = {
+                                    to: site_email_addr,
+                                    data: {
+                                        fuel_site: loc_code,
+                                        timestamp: currentTimestamp,
+                                    },
+                                }
+
+                                await fetch('/api/email/fuelflowerror', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(emailData)
+                                });
+                                console.log(`Fuel flow - No ticket`);
                             }
                         } catch (error) {
                             console.error("Error fetching logs:", error);
