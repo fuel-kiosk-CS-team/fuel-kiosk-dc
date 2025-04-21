@@ -2,6 +2,7 @@ import { createTransport } from 'nodemailer';
 
 import { FuelTicketEmail } from './emailTemplates/FuelTicketEmail';
 import { TotalizerErrorEmail } from './emailTemplates/TotalizerErrorEmail';
+import { UnexpectedFuelFlowEmail } from './emailTemplates/UnexpectedFuelFlowEmail';
 
 const transporter = createTransport({
     host: "mail.engr.oregonstate.edu",
@@ -64,4 +65,14 @@ export async function sendTotalizerErrorEmail(to, data) {
     );
 
     sendEmailHTML(to, 'Totalizer Reading Error', emailHTML);
+}
+
+export async function sendFuelFlowErrorEmail(to, data) {
+    const ReactDomServer = (await import('react-dom/server')).default;
+
+    const emailHTML = ReactDomServer.renderToStaticMarkup(
+        <UnexpectedFuelFlowEmail {...data} />
+    );
+
+    sendEmailHTML(to, `Unexpected Fuel Flow: ${data.loc_code}`, emailHTML);
 }

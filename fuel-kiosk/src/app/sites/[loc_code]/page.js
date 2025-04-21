@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, use } from 'react';
+import React, { useContext, useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import {
     Container,
@@ -16,6 +16,8 @@ import {
 import { FuelTypeSelector } from '../../components/fuelselector/FuelTypeSelector';
 import { TotalizerVerification } from '../../components/totalizer/TotalizerVerification';
 import { FuelEntryForm } from '../../components/fuelentry/FuelEntryForm';
+import { FuelFlowStatus } from '../../components/dashboard/contents/FuelFlowStatus';
+import { FuelFlowContext } from "../../components/context/FuelFlowProvider";
 
 export default function FuelSitePage({ params: paramsPromise }) {
     const router = useRouter();
@@ -33,6 +35,10 @@ export default function FuelSitePage({ params: paramsPromise }) {
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const { socket, timeoutID } = useContext(FuelFlowContext);
+    const [socketValue, setSocketValue] = socket;
+    const [timeoutIDValue, setTimeoutIDValue] = timeoutID;
 
     useEffect(() => {
         const fetchSiteInfo = async () => {
@@ -102,7 +108,7 @@ export default function FuelSitePage({ params: paramsPromise }) {
             {siteInfo ? (
                 <Stack spacing="lg">
                     <Title order={1}>{siteInfo.LOC_loc_code}--{siteInfo.name}</Title>
-
+                    <FuelFlowStatus loc_code={loc_code} site_email_addr={siteInfo.email_addr}/>
                     {step === 'SELECT_FUEL' && (
                         <Stack spacing="md">
                             <Title order={2}>Select Fuel Type</Title>
@@ -174,6 +180,7 @@ export default function FuelSitePage({ params: paramsPromise }) {
                                         },
                                         body: JSON.stringify(emailData)
                                     });
+                                    clearTimeout(timeoutIDValue);
 
                                     setStep('SELECT_FUEL');
                                     setResetTotalizer(false);

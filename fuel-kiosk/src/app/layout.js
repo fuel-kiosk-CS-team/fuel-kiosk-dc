@@ -1,6 +1,7 @@
 import React from 'react';
 import { MantineProvider, Center } from "@mantine/core";
 import '@mantine/core/styles.css';
+import { FuelFlowProvider } from "./components/context/FuelFlowProvider"
 // import {metadata} from "/fuel-kiosk-dc/fuel-kiosk/src/app/manifest"
 
 import classes from './app.module.css';
@@ -48,11 +49,13 @@ export default function RootLayout({ children }) {
             {/* <link rel="manifest" href="/manifest.json"></link> */}
             </head>
             <body className={classes.base} >
+              <FuelFlowProvider>
                 <MantineProvider defaultColorScheme="dark">
                     <Center className={classes.center}>
                         {children}
                     </Center>
                 </MantineProvider>
+              </FuelFlowProvider>
             </body>
         </html>
     );
