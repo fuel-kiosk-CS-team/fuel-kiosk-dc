@@ -35,6 +35,7 @@ CREATE TABLE `LOC_MAIN` (
     `name` VARCHAR(191) NOT NULL,
     `email_addr` VARCHAR(191) NULL,
     `is_fuel_site` BOOLEAN NOT NULL DEFAULT false,
+    `last_heartbeat` DATETIME(3) NULL,
 
     UNIQUE INDEX `LOC_MAIN_LOC_loc_code_key`(`LOC_loc_code`),
     PRIMARY KEY (`LOC_loc_code`)

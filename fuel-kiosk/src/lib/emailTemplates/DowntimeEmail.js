@@ -1,8 +1,8 @@
 import React from 'react';
 
-export function TotalizerErrorEmail({
-    fuel_site,
-    fuel_type,
+export function DowntimeEmail({
+    loc_code,
+    last_timestamp,
 }) {
     return (
         <html>
@@ -11,8 +11,10 @@ export function TotalizerErrorEmail({
             `}
             </style>
             <body>
-                <p>There is a user generated flag for beginning totalizer reading at {fuel_site} for {fuel_type}.</p>
-                <p>The user will be prompted to enter a corrected totalizer starting number.</p>
+                <p>There hasn't been a heartbeat from the {loc_code} fuel kiosk since {last_timestamp}. The following location may be experiencing technical difficulties.<br /><br />
+
+                   Please check on the device promptly.
+                </p>
 
                 <p>Thank You,<br />
                 Motor Pool<br /><br />
