@@ -81,9 +81,4 @@ else
     echo "export EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .dev.env
 fi
 
-echo >> .dev.env
-
-# setup heartbeat settings in env file
-echo "export ALLOWED_DOWNTIME_HOURS=1" >> .dev.env
-
 echo "IMPORTANT: Before you run \`npm run dev\` you may need to run \`source .dev.env\` which will set the important envs"

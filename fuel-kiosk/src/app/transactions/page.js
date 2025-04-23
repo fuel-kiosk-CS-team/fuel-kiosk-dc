@@ -114,8 +114,10 @@ function FuelTransLog() {
 
     const logout = async () => {
         try {
-            const response = await fetch('/api/auth/logout');
+            // send final heartbeat
+            await fetch('api/heartbeat')
 
+            const response = await fetch('/api/auth/logout');
             if (!response.ok) {
                 throw new Error("Logout failed");
             }
@@ -124,7 +126,7 @@ function FuelTransLog() {
         } finally {
             router.push('/');
         }
-    };
+    }
 
     return (
         <Stack>

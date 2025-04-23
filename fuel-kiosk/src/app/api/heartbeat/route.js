@@ -15,7 +15,7 @@ export async function GET() {
             userId = session?.userId;
         }
 
-        if(!userId) {
+        if(!userId || userId == "ADMIN") {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 

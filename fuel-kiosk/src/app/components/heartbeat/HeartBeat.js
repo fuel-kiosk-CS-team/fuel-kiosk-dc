@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-const HEARTBEAT_INTERVAL_MINUTES = 0.1;
+const HEARTBEAT_INTERVAL_HOURS = 1;
 
 export default function HeartBeat() {
     useEffect(() => {
@@ -12,7 +12,7 @@ export default function HeartBeat() {
             } catch (error) {
                 console.error("Heartbeat request error:", error);
             }
-        }, HEARTBEAT_INTERVAL_MINUTES * (60 * 1000));
+        }, HEARTBEAT_INTERVAL_HOURS * (60 * 60 * 1000));
 
         // cleanup interval when the component unmounts
         return () => clearInterval(heartBeatInterval);
