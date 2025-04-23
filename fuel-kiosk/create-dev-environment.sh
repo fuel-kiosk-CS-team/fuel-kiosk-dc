@@ -70,6 +70,7 @@ echo "export SECRET_KEY=$SECRET_KEY" >> .dev.env
 
 echo >> .dev.env
 
+# Setup email credentials in env file
 if [ -z "$EMAIL_USER" ] || [ -z "$EMAIL_PASSWORD" ]; then
     echo "export EMAIL_USER=\"Put in your ONID username\"" >> .dev.env
     echo "export EMAIL_PASSWORD=\"Put in your ONID password\"" >> .dev.env
@@ -79,5 +80,10 @@ else
     echo "export EMAIL_USER=$EMAIL_USER" >> .dev.env
     echo "export EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .dev.env
 fi
+
+echo >> .dev.env
+
+# setup heartbeat settings in env file
+echo "export ALLOWED_DOWNTIME_HOURS=1" >> .dev.env
 
 echo "IMPORTANT: Before you run \`npm run dev\` you may need to run \`source .dev.env\` which will set the important envs"

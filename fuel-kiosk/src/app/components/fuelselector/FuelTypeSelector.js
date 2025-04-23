@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Stack, Group, Button } from '@mantine/core';
+import { Stack, Group, Button, Center } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 
 export function FuelTypeSelector({ site, onSelect }) {
@@ -44,6 +44,9 @@ export function FuelTypeSelector({ site, onSelect }) {
             </Group>
             <Button onClick={() => router.push(`/transactions?loc_code=${site}`)}>View Transaction Records</Button>
             <Button onClick={logout}>Logout</Button>
+            <Center>
+                <p>NOTE: Only logout if you are switching sites.</p>
+            </Center>
         </Stack>
     );
 }

@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server';
 import { prisma } from '../../../../lib/prisma';
 import { sendDowntimeEmail } from '../../../../lib/email';
 
-const STALE_THRESHOLD_MINUTES = 5;
+// default to 6 hours to start sending donwtime alerts or whatever is configured
+const ALLOWED_DOWNTIME_HOURS = process.env.ALLOWED_DOWNTIME_HOURS ? process.env.ALLOWED_DOWNTIME_HOURS : 6;
 
 export async function GET() {
-    const thresholdDate = new Date(Date.now() - STALE_THRESHOLD_MINUTES * 60 * 1000);
-
+    const thresholdDate = new Date(Date.now() - ALLOWED_DOWNTIME_HOURS * 60 * 60 * 1000);
     try {
         const staleLocations = await prisma.lOC_MAIN.findMany({
             where: {
@@ -23,7 +23,7 @@ export async function GET() {
             });
         }
 
-        return NextResponse.json({ message: `Checked ${staleLocations.length} locations.` });
+        return NextResponse.json({ message: `The following locations are down: ${staleLocations.length} locations.` });
     } catch (error) {
         console.error('Cron heartbeat check failed:', error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
