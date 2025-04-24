@@ -5,7 +5,7 @@ API_URL="localhost:3000/api/heartbeat/check"
 LOG_FILE="/var/log/heartbeat.log"
 
 # Period to run this cron job
-HOURS=12
+HOURS="${NEXT_PUBLIC_ALLOWED_DOWNTIME_HOURS:-12}"
 CRON_SCHEDULE="0 */$HOURS * * *"
 
 # The exact command to add

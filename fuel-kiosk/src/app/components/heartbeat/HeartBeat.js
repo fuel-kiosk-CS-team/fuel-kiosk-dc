@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 
-const HEARTBEAT_INTERVAL_HOURS = 1;
+// Send heartbeats at the configured interval
+const HEARTBEAT_INTERVAL_HOURS = process.env.NEXT_PUBLIC_HEARTBEAT_INTERVAL_HOURS ?? 6;
 
 export default function HeartBeat() {
     useEffect(() => {

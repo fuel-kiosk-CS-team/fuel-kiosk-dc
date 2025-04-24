@@ -21,11 +21,17 @@ export function SiteManager() {
     const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
+        // initial load
         loadData();
+
+        // refresh the data every 30 seconds
+        const intervalId = setInterval(loadData, 30 * 1000);
+        return () => clearInterval(intervalId);
     }, []);
 
     const loadData = async () => {
         setRefreshing(true); // Start animation
+
         try {
             const response = await fetch('/api/sites');
             if (response.ok) {
@@ -37,6 +43,7 @@ export function SiteManager() {
                 data.forEach(site => {
                     initialToggles[site.LOC_loc_code] = site.alert ?? false;
                 });
+
                 setAlertToggles(initialToggles);
             } else {
                 alert('Failed to fetch data from server.');
@@ -87,7 +94,9 @@ export function SiteManager() {
     const rows = filteredSites.map((site) => {
         const lastHeartbeat = site.last_heartbeat ? new Date(site.last_heartbeat) : null;
         const diffHours = lastHeartbeat ? (now.getTime() - lastHeartbeat.getTime()) / (1000 * 60 * 60) : 0;
-        const isHealthy = diffHours < 6; // Healthy if within 6 hours
+
+        // healthy if the heartbeat isn't older than configured time
+        const isHealthy = diffHours < (process.env.NEXT_PUBLIC_ALLOWED_DOWNTIME_HOURS ?? 12);
 
         return (
             <Table.Tr key={site.LOC_loc_code}>
