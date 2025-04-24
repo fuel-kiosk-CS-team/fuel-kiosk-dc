@@ -64,6 +64,7 @@ model LOC_MAIN {
   email_addr     String?
   is_fuel_site   Boolean @default(false) // Prisma uses Boolean instead of CHAR(1)
   last_heartbeat DateTime?
+  alert          Boolean @default(true)
 
   // Relations
   FuelTransactions FTK_bulkfuel[]

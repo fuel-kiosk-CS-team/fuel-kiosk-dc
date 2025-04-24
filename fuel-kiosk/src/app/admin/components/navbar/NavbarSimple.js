@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+
 import {
     IconLogout,
     IconMapPin2,
     IconClipboardText
 } from '@tabler/icons-react';
+
 import { Group } from '@mantine/core';
 
 import classes from './NavbarSimple.module.css';
 
-export function NavbarSimple({ setSite }) {
+export function NavbarSimple({ setSite, setSidebarOpen }) {
     const router = useRouter();
 
     const [active, setActive] = useState('');
@@ -21,12 +23,11 @@ export function NavbarSimple({ setSite }) {
 
             if (localData) {
                 let jsonData = JSON.parse(localData);
+
                 // Parse and use local data if available
                 setSiteData(jsonData);
-
-                let firstSite = jsonData.filter(item => item.LOC_loc_code !== 'ADMIN')[0];
-                setActive(firstSite);
-                setSite(firstSite)
+                setActive(jsonData[0]);
+                setSite(jsonData[0]);
             } else {
                 // Otherwise, fetch from the server
                 try {
@@ -50,7 +51,7 @@ export function NavbarSimple({ setSite }) {
         loadData();
     }, []);
 
-    const links = siteData.filter(item => item.LOC_loc_code !== 'ADMIN').map((item) => (
+    const links = siteData.map((item) => (
         <a
             className={classes.link}
             data-active={item.LOC_loc_code === active.LOC_loc_code || undefined}
@@ -61,6 +62,7 @@ export function NavbarSimple({ setSite }) {
 
                 setActive(item);
                 setSite(item);
+                setSidebarOpen((o) => !o);
             }}
         >
             <IconMapPin2 className={classes.linkIcon} stroke={1.5} />

@@ -20,10 +20,12 @@ export async function GET() {
         });
 
         for (const loc of staleLocations) {
-            await sendDowntimeEmail(loc.email_addr, {
-                loc_code: loc.LOC_loc_code,
-                last_timestamp: new Date(loc.last_heartbeat).toLocaleString(),
-            });
+            if (loc.alert) {
+                await sendDowntimeEmail(loc.email_addr, {
+                    loc_code: loc.LOC_loc_code,
+                    last_timestamp: new Date(loc.last_heartbeat).toLocaleString(),
+                });
+            }
         }
 
         let message = "No locations are down!";
