@@ -8,36 +8,45 @@ import {
     Switch,
     Badge,
     Divider,
+    Group,
+    ActionIcon,
+    Tooltip
 } from '@mantine/core';
+
+import { IconRefresh } from '@tabler/icons-react';
 
 export function SiteManager() {
     const [siteData, setSiteData] = useState([]);
     const [alertToggles, setAlertToggles] = useState({});
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
-        const loadData = async () => {
-            try {
-                const response = await fetch('/api/sites');
-                if (response.ok) {
-                    const data = await response.json();
-                    setSiteData(data);
-                    localStorage.setItem('siteData', JSON.stringify(data));
-
-                    // Set alert toggles from `alerts` field
-                    const initialToggles = {};
-                    data.forEach(site => {
-                        initialToggles[site.LOC_loc_code] = site.alert ?? false;
-                    });
-                    setAlertToggles(initialToggles);
-                } else {
-                    alert('Failed to fetch data from server.');
-                }
-            } catch (error) {
-                alert('Error fetching site data: ' + error.message);
-            }
-        };
         loadData();
     }, []);
+
+    const loadData = async () => {
+        setRefreshing(true); // Start animation
+        try {
+            const response = await fetch('/api/sites');
+            if (response.ok) {
+                const data = await response.json();
+                setSiteData(data);
+                localStorage.setItem('siteData', JSON.stringify(data));
+
+                const initialToggles = {};
+                data.forEach(site => {
+                    initialToggles[site.LOC_loc_code] = site.alert ?? false;
+                });
+                setAlertToggles(initialToggles);
+            } else {
+                alert('Failed to fetch data from server.');
+            }
+        } catch (error) {
+            alert('Error fetching site data: ' + error.message);
+        } finally {
+            setRefreshing(false); // Stop animation
+        }
+    };
 
     const toggleAlert = async (locCode) => {
         const newValue = !alertToggles[locCode];
@@ -117,7 +126,25 @@ export function SiteManager() {
     return (
         <Stack spacing="lg">
             <Title order={1}>ADMIN -- FUEL SITE ADMINISTRATOR</Title>
-            <Title order={2}>Site Management:</Title>
+            <Group>
+                <Title order={2}>Site Management:</Title>
+                <Tooltip label="Refresh" withArrow position="right">
+                    <ActionIcon
+                        variant="light"
+                        color="blue"
+                        size="lg"
+                        onClick={loadData}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        <IconRefresh
+                            style={{
+                                transition: 'transform 0.3s ease',
+                                transform: refreshing ? 'rotate(360deg)' : 'rotate(0deg)',
+                            }}
+                        />
+                    </ActionIcon>
+                </Tooltip>
+            </Group>
             <Divider />
 
             <Table striped highlightOnHover withTableBorder>
