@@ -32,10 +32,6 @@ else
     sleep 10
 fi
 
-# Setup DB connection URL for prisma and Secret Key for Sessions
-export DATABASE_URL=mysql://root:root@localhost:3306/fuel-kiosk?connection_limit=2
-export SECRET_KEY=$(openssl rand -base64 32)
-
 # Ensure all packages are installed
 echo "Installing Packages..."
 
@@ -47,6 +43,9 @@ else
     echo "CI environment not detected. Running npm install..."
     npm install || (echo "ERROR: problem installing npm packages"; exit 1)
 fi
+
+# Setup DB connection URL for prisma and Secret Key for Sessions
+export DATABASE_URL=mysql://root:root@localhost:3306/fuel-kiosk?connection_limit=2
 
 # Setup prisma cache and migrate db
 pushd src
@@ -64,12 +63,18 @@ if [ ! -f ".dev.env" ]; then
     touch .dev.env
 fi
 
+# Generate new secret_key if one doesn't exist
+if [ -z "$SECRET_KEY" ]; then
+    export SECRET_KEY=$(openssl rand -base64 32)
+fi
+
 # Setup connection URL in env file
 echo "export DATABASE_URL=$DATABASE_URL" > .dev.env
 echo "export SECRET_KEY=$SECRET_KEY" >> .dev.env
 
 echo >> .dev.env
 
+# Setup email credentials in env file
 if [ -z "$EMAIL_USER" ] || [ -z "$EMAIL_PASSWORD" ]; then
     echo "export EMAIL_USER=\"Put in your ONID username\"" >> .dev.env
     echo "export EMAIL_PASSWORD=\"Put in your ONID password\"" >> .dev.env
@@ -79,5 +84,13 @@ else
     echo "export EMAIL_USER=$EMAIL_USER" >> .dev.env
     echo "export EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .dev.env
 fi
+
+echo >> .dev.env
+
+echo "# prefixing the envs with NEXT_PUBLIC tells Next.js to include" >> .dev.env
+echo "# the variables in the JS bundle so that they can be accessed via" >> .dev.env
+echo "# the client and server. TL;DR - DON'T REMOVE NEXT_PUBLIC" >> .dev.env
+echo "export NEXT_PUBLIC_HEARTBEAT_INTERVAL_HOURS=0.001" >> .dev.env
+echo "export NEXT_PUBLIC_ALLOWED_DOWNTIME_HOURS=0.01" >> .dev.env
 
 echo "IMPORTANT: Before you run \`npm run dev\` you may need to run \`source .dev.env\` which will set the important envs"

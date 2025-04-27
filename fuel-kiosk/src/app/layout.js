@@ -2,15 +2,10 @@ import React from 'react';
 import { MantineProvider, Center } from "@mantine/core";
 import '@mantine/core/styles.css';
 import { FuelFlowProvider } from "./components/context/FuelFlowProvider"
-// import {metadata} from "/fuel-kiosk-dc/fuel-kiosk/src/app/manifest"
+
+import HeartBeat from './components/heartbeat/HeartBeat';
 
 import classes from './app.module.css';
-// import manifest from './manifest';
-
-
-// export const viewport = {
-//     themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#fff" }],
-// }
 
 const APP_NAME = "PWA APP"
 const APP_DEFAULT_TITLE = "OSU FUEL KIOSK"
@@ -30,11 +25,10 @@ export const metadata = {
       capable: true,
       statusBarStyle: "default",
       title: APP_DEFAULT_TITLE,
-      // startUpImage: [],
     },
-    
+
   };
-  
+
   export const viewport = {
     themeColor: "#FFFFFF",
   };
@@ -45,9 +39,7 @@ export default function RootLayout({ children }) {
 
     return (
         <html lang="en">
-            <head>
-            {/* <link rel="manifest" href="/manifest.json"></link> */}
-            </head>
+            <HeartBeat />
             <body className={classes.base} >
               <FuelFlowProvider>
                 <MantineProvider defaultColorScheme="dark">

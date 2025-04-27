@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Stack, TextInput, Button, Table, Title, Group } from "@mantine/core";
+import { Stack, TextInput, Button, Table, Title, Group, Center } from "@mantine/core";
 
 function FuelTransLog() {
     const router = useRouter();
@@ -114,8 +114,10 @@ function FuelTransLog() {
 
     const logout = async () => {
         try {
-            const response = await fetch('/api/auth/logout');
+            // send final heartbeat
+            await fetch('api/heartbeat')
 
+            const response = await fetch('/api/auth/logout');
             if (!response.ok) {
                 throw new Error("Logout failed");
             }
@@ -124,7 +126,7 @@ function FuelTransLog() {
         } finally {
             router.push('/');
         }
-    };
+    }
 
     return (
         <Stack>
@@ -175,10 +177,12 @@ function FuelTransLog() {
             </Group>
 
             {/* Navigation Buttons */}
-            <Group justify="center" mt="md">
-                <Button onClick={() => router.back()}>Back</Button>
-                <Button onClick={logout}>Log Out</Button>
-            </Group>
+            <Button onClick={() => router.back()}>Back</Button>
+            <Button onClick={logout}>Log Out</Button>
+
+            <Center>
+                <p>NOTE: Only logout if you are switching sites.</p>
+            </Center>
 
             <Title align="center" order={1} mt="md">Records</Title>
 

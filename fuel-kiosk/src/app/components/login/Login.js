@@ -85,6 +85,9 @@ export function Login(){
                 throw new Error("Authentication failed");
             }
 
+            // send heartbeat after logging in
+            await fetch('/api/heartbeat');
+
             const destination = selectedFuelSite.LOC_loc_code === 'ADMIN' ? "/admin" : `/sites/${selectedFuelSite.value}`;
             router.push(destination);
         } catch (error) {

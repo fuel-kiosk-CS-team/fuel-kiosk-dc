@@ -40,29 +40,31 @@ model USR_MAIN {
 model FTK_bulkfuel {
   id               Int     @id @default(autoincrement())
   datetime_Insert  DateTime
-  ftk_date        DateTime
-  loc_code        String
-  fuel_type       String
-  totalizer_start Decimal?
-  eq_no           String?
-  pid_info        String?
-  odometer        Int?
-  qty_fuel        Decimal?
-  totalizer_end   Decimal?
-  acct_code       String?
+  ftk_date         DateTime
+  loc_code         String
+  fuel_type        String
+  totalizer_start  Decimal?
+  eq_no            String?
+  pid_info         String?
+  odometer         Int?
+  qty_fuel         Decimal?
+  totalizer_end    Decimal?
+  acct_code        String?
   business_purpose String?
   totalizer_update Decimal?
 
   // Relations
   Location        LOC_MAIN @relation(fields: [loc_code], references: [LOC_loc_code])
-  User           USR_MAIN? @relation(fields: [pid_info], references: [oper_oper_no])
+  User            USR_MAIN? @relation(fields: [pid_info], references: [oper_oper_no])
 }
 
 model LOC_MAIN {
-  LOC_loc_code String  @id @unique
-  name         String
-  email_addr   String?
-  is_fuel_site Boolean @default(false) // Prisma uses Boolean instead of CHAR(1)
+  LOC_loc_code   String  @id @unique
+  name           String
+  email_addr     String?
+  is_fuel_site   Boolean @default(false) // Prisma uses Boolean instead of CHAR(1)
+  last_heartbeat DateTime?
+  alert          Boolean @default(true)
 
   // Relations
   FuelTransactions FTK_bulkfuel[]

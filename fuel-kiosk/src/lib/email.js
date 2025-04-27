@@ -3,6 +3,7 @@ import { createTransport } from 'nodemailer';
 import { FuelTicketEmail } from './emailTemplates/FuelTicketEmail';
 import { TotalizerErrorEmail } from './emailTemplates/TotalizerErrorEmail';
 import { UnexpectedFuelFlowEmail } from './emailTemplates/UnexpectedFuelFlowEmail';
+import { DowntimeEmail } from './emailTemplates/DowntimeEmail';
 
 const transporter = createTransport({
     host: "mail.engr.oregonstate.edu",
@@ -75,4 +76,14 @@ export async function sendFuelFlowErrorEmail(to, data) {
     );
 
     sendEmailHTML(to, `Unexpected Fuel Flow: ${data.loc_code}`, emailHTML);
+}
+
+export async function sendDowntimeEmail(to, data) {
+    const ReactDomServer = (await import('react-dom/server')).default;
+
+    const emailHTML = ReactDomServer.renderToStaticMarkup(
+        <DowntimeEmail {...data} />
+    );
+
+    sendEmailHTML(to, `WARNING: ${data.loc_code} Fuel Kiosk Possibly Down`, emailHTML);
 }
