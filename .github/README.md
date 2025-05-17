@@ -12,12 +12,12 @@ This repository, and it's contents, were used in and are the result of the 2024-
 
 ## Team Members and Contact:
 
-- Riley Rice (riceri@oregonstate.edu)
-- Judah Jackson (jacksjud@oregonstate.edu)
-- Ryan Muriset (murisetr@oregonstate.edu)
-- Michael Blakeman (blakemam@oregonstate.edu)
-- Ryan Reed (reedrya@oregonstate.edu)
-- Vi Vuong (vuongv@oregonstate.edu)
+- Riley Rice (riceri@oregonstate.edu) - Scrum Master/Lead developer
+- Judah Jackson (jacksjud@oregonstate.edu) - Meeting Coordinator/Developer
+- Ryan Muriset (murisetr@oregonstate.edu) - Documentation Lead/Developer
+- Michael Blakeman (blakemam@oregonstate.edu) - Developer
+- Ryan Reed (reedrya@oregonstate.edu) - Developer
+- Vi Vuong (vuongv@oregonstate.edu) - ECE Coordinator/Developer
 
 ---
 
