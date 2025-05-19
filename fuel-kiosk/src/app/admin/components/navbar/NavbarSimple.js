@@ -96,7 +96,7 @@ export function NavbarSimple({ setSite, setSidebarOpen }) {
             </div>
 
             <div className={classes.footer}>
-                <a href="" className={classes.link} onClick={() => router.push('/transactions?loc_code=ADMIN')}>
+                <a  className={classes.link} onClick={() => router.push('/transactions?loc_code=ADMIN')}>
                     <IconClipboardText className={classes.linkIcon} stroke={1.5} />
                     <span>Transaction Logs</span>
                 </a>
