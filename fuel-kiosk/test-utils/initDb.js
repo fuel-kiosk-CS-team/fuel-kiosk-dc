@@ -6,6 +6,12 @@ const loc_main_json = require('./test-data/LOC_MAIN.json');
 const usr_main_json = require('./test-data/USR_MAIN.json');
 const ftk_bulkfuel_json = require('./test-data/FTK_bulkfuel.json');
 
+// This is essentially how the database is initialized for testing
+// The main difference between the makeup of this database and the
+// one that is used with the actual sites is the passwords, aka 
+// 'disabled_reason', which can be found in test-data/USR_MAIN.json
+// Again, this is really just for testing.
+
 async function importData(){
     // Insert testing USR_MAIN into DB
     await prisma.uSR_MAIN.createMany({
