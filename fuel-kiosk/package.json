@@ -32,7 +32,9 @@
     "react-dom": "^18.3.1",
     "serwist": "^9.0.12",
     "socket.io-client": "^4.8.1",
-    "start-server-and-test": "^2.0.8"
+    "start-server-and-test": "^2.0.8",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-react": "^5.22.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

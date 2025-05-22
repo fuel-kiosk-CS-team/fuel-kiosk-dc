@@ -1,3 +1,69 @@
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Authenticate user
+ *     description: Authenticates a user and creates a session
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *               - password
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: User's ID
+ *                 example: "USER123"
+ *               password:
+ *                 type: string
+ *                 description: User's password
+ *                 example: "password123"
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Login successful"
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               description: Session cookie for authentication
+ *       400:
+ *         description: Missing userId or password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Missing userId or password"
+ *       401:
+ *         description: Invalid credentials
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Invalid credentials"
+ *       500:
+ *         description: Internal server error
+ */
+
 import { prisma } from '../../../../lib/prisma';
 import { NextResponse } from 'next/server';
 import { createSession } from '../../../../lib/session';

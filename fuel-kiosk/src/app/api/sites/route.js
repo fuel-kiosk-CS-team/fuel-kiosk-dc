@@ -1,5 +1,52 @@
 // app/api/sites/route.js
 
+/**
+ * @swagger
+ * /api/sites:
+ *   get:
+ *     summary: Retrieve all fuel sites
+ *     description: Returns a list of all fuel sites from the database with their current status
+ *     tags:
+ *       - Sites
+ *     responses:
+ *       200:
+ *         description: A list of fuel sites
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   LOC_loc_code:
+ *                     type: string
+ *                     description: The unique location code
+ *                     example: "SITE001"
+ *                   LOC_loc_name:
+ *                     type: string
+ *                     description: The name of the location
+ *                     example: "Main Fuel Station"
+ *                   alert:
+ *                     type: boolean
+ *                     description: Alert status for the location
+ *                     example: false
+ *                   last_heartbeat:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Last heartbeat timestamp
+ *                     example: "2024-03-22T15:30:00Z"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Failed to fetch fuel sites"
+ */
+
 import { prisma } from '../../../lib/prisma';
 import { NextResponse } from 'next/server';
 

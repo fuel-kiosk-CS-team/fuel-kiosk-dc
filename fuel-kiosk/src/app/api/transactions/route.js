@@ -1,3 +1,107 @@
+/**
+ * @swagger
+ * /api/transactions:
+ *   get:
+ *     summary: Retrieve fuel transactions
+ *     description: Returns a filtered list of fuel transactions based on various parameters
+ *     tags:
+ *       - Transactions
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: loc_code
+ *         schema:
+ *           type: string
+ *         description: Location code to filter transactions
+ *         example: "SITE001"
+ *       - in: query
+ *         name: pid_info
+ *         schema:
+ *           type: string
+ *         description: PID information to filter transactions
+ *         example: "PID123"
+ *       - in: query
+ *         name: fuel_type
+ *         schema:
+ *           type: string
+ *         description: Type of fuel to filter transactions
+ *         example: "DIESEL"
+ *       - in: query
+ *         name: business_purpose
+ *         schema:
+ *           type: string
+ *         description: Business purpose to filter transactions
+ *         example: "MAINTENANCE"
+ *       - in: query
+ *         name: eq_no
+ *         schema:
+ *           type: string
+ *         description: Equipment number to filter transactions
+ *         example: "EQ001"
+ *       - in: query
+ *         name: acct_code
+ *         schema:
+ *           type: string
+ *         description: Account code to filter transactions
+ *         example: "ACC123"
+ *       - in: query
+ *         name: start
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: Start date for filtering transactions
+ *         example: "2024-03-01T00:00:00Z"
+ *       - in: query
+ *         name: end
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *         description: End date for filtering transactions
+ *         example: "2024-03-22T23:59:59Z"
+ *     responses:
+ *       200:
+ *         description: A list of filtered fuel transactions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   datetime_Insert:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Transaction timestamp
+ *                   loc_code:
+ *                     type: string
+ *                     description: Location code
+ *                   fuel_type:
+ *                     type: string
+ *                     description: Type of fuel
+ *                   qty_fuel:
+ *                     type: number
+ *                     description: Quantity of fuel dispensed
+ *                   pid_info:
+ *                     type: string
+ *                     description: PID information
+ *                   eq_no:
+ *                     type: string
+ *                     description: Equipment number
+ *                   business_purpose:
+ *                     type: string
+ *                     description: Business purpose
+ *                   acct_code:
+ *                     type: string
+ *                     description: Account code
+ *       401:
+ *         description: Unauthorized - User not logged in
+ *       403:
+ *         description: Forbidden - User not authorized for requested location
+ *       500:
+ *         description: Internal server error
+ */
+
 import { prisma } from '../../../lib/prisma';
 import { NextResponse } from 'next/server';
 
