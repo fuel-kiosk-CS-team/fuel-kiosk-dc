@@ -7,14 +7,14 @@ import { PasswordInput, Select, Button } from '@mantine/core';
 // import { db, posts } from '@/lib/db'
 
 export function Login(){
-
+    // State management for form inputs and site data
     const [password, setPassword] = useState('');
     const [siteData, setSiteData] = useState([]);
     const [selectedSite, setSelectedSite] = useState(null);
 
     const router = useRouter();
 
-    // Temporary example of how we can get site data - currently using localStorage (likely to be removed or changed soon) or an API call
+    // Load site data on component mount
     useEffect(() => {
         const loadData = async () => {
             const localData = localStorage.getItem('siteData');
@@ -42,7 +42,7 @@ export function Login(){
         loadData();
     }, []);
 
-
+    // Validate form inputs before submission
     const validateInputs = (selectedSite, password, siteData) => {
         if (!selectedSite) {
             alert("Please select a fuel site!");
@@ -75,6 +75,7 @@ export function Login(){
         if (!selectedFuelSite) return;
 
         try {
+            // Authenticate user credentials
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -87,7 +88,6 @@ export function Login(){
 
             // send heartbeat after logging in
             await fetch('/api/heartbeat');
-
             const destination = selectedFuelSite.LOC_loc_code === 'ADMIN' ? "/admin" : `/sites/${selectedFuelSite.value}`;
             router.push(destination);
         } catch (error) {
@@ -98,7 +98,6 @@ export function Login(){
     return (
         <form
             onSubmit={login}
-
         >
             {/* Bulk Fuel Site Selection */}
             <Select
@@ -113,12 +112,15 @@ export function Login(){
 
             />
 
+            {/* Password input field */}
             <PasswordInput required
                 label="Login Password"
                 placeholder="Your password"
                 value={password}
                 onChange={(event) => setPassword(event.currentTarget.value)}
             />
+
+            {/* Submit button */}
             <Button
                 type="submit"
                 mt="md"

@@ -1,22 +1,27 @@
+// Core imports for handling requests and session management
 import { NextResponse } from 'next/server'
 import { decrypt } from './lib/session'
 import { cookies } from 'next/headers'
 
+// Middleware to handle authentication and route protection
 export default async function middleware(req) {
     const path = req.nextUrl.pathname
     const searchParams = req.nextUrl.searchParams;
     let userId = undefined
 
+    // Extract and decrypt user session from cookies
     const cookie = (await cookies()).get('session')?.value
     if(cookie) {
         const session = await decrypt(cookie)
         userId = session.userId
     }
 
+    // Redirect to home if user isn't authenticated
     if (!userId && path !== '/') {
         return NextResponse.redirect(new URL('/', req.nextUrl))
     }
 
+    // Handle transaction routes with location code validation
     if (userId && path.includes('/transactions')) {
         const loc_code = searchParams.get('loc_code');
 
@@ -29,6 +34,7 @@ export default async function middleware(req) {
         }
     }
 
+    // Ensure users can only access their assigned sites (except admin)
     if (userId && userId !== 'ADMIN' && !path.includes(userId)) {
         return NextResponse.redirect(new URL(`/sites/${userId}`, req.nextUrl))
     }
@@ -36,6 +42,7 @@ export default async function middleware(req) {
     return NextResponse.next()
 }
 
+// Configure which routes the middleware should run on
 export const config = {
   matcher: [
     /*
