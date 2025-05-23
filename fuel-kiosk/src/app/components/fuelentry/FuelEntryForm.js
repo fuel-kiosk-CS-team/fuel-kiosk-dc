@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Paper, Stack, TextInput, Select, Group, Button } from '@mantine/core';
 
+// Form component for fuel entry data collection
 export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTotalizer }) {
+    // Initialize default form values
     const defaultValues = {
         dateTimeInsert: new Date()
             .toLocaleString('en-US', { hour12: false })
@@ -19,6 +21,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
         projectUnit: '',
     };
 
+    // State management for form data and UI states
     const [formData, setFormData] = useState({
         ...defaultValues,
         ...initialValues,
@@ -26,13 +29,14 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         setError(null);
 
         try {
-            // Prepare the data for submission
+            // Prepare data for API submission
             const dataToSubmit = {
                 loc_code: formData.fuelSiteCode || '',
                 fuel_type: formData.fuelType,
@@ -45,6 +49,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
                 projectUnit: formData.projectUnit
             };
 
+            // Submit data to API
             const response = await fetch('/api/fuel-entry', {
                 method: 'POST',
                 headers: {
@@ -59,6 +64,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
 
             const result = await response.json();
 
+            // Handle successful submission
             if (result.success) {
                 onSubmit?.(result.data);
                 handleReset();
@@ -73,6 +79,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
         }
     };
 
+    // Reset form to default values
     const handleReset = () => {
         setFormData({
             dateTimeInsert: new Date().toLocaleString('en-US', { hour12: false }),
@@ -86,12 +93,14 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
         <Paper shadow="xs" p="md" withBorder>
             <form onSubmit={handleSubmit}>
                 <Stack spacing="md">
+                    {/* Error message display */}
                     {error && (
                         <div style={{ color: 'red', marginBottom: '1rem' }}>
                             {error}
                         </div>
                     )}
 
+                    {/* Totalizer reset alert */}
                     { resetTotalizer && (
                         <div>
                             <h2><p>An email alert was generated.</p></h2>
@@ -99,6 +108,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
                         </div>
                     )}
 
+                    {/* Form fields */}
                     <TextInput
                         label="Date/Time Insert"
                         value={formData.dateTimeInsert || ''}
@@ -109,6 +119,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
                         value={formData.date || ''}
                         disabled
                     />
+                    {/* Conditional totalizer input based on reset status */}
                     { resetTotalizer ? (
                         <TextInput
                             label="Totalizer Start (xxx.x)"
@@ -126,7 +137,6 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
                             disabled
                             required
                         />
-
                     )}
                     <TextInput
                         label="Fuel Site"
@@ -141,7 +151,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
                         }
                         required
                     />
-                    {/* Rest of your form fields... */}
+                    {/* Equipment and user information fields */}
                     <TextInput
                         label="EQ License or Desc."
                         value={formData.eqLicense}
@@ -173,6 +183,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
                         placeholder="0.0"
                         required
                     />
+                    {/* Category selection */}
                     <Select
                         label="Exp. Category: (Required)"
                         value={formData.expCategory}
@@ -199,6 +210,7 @@ export function FuelEntryForm({ siteInfo, initialValues = {}, onSubmit, resetTot
                         placeholder="Recommended"
                     />
 
+                    {/* Form action buttons */}
                     <Group position="apart" mt="md">
                         <Button
                             type="submit"

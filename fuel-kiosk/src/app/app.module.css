@@ -1,20 +1,23 @@
+/* Base container styles - full viewport height and width with centered content */
 .base {
     margin: 0;
-    min-height: 100dvh;
-    width: 100dvw;
+    min-height: 100dvh;  /* Dynamic viewport height */
+    width: 100dvw;       /* Dynamic viewport width */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow-x: hidden;  /* Prevent horizontal scrolling */
+    overflow-y: auto;    /* Allow vertical scrolling if needed */
 }
 
+/* Center container - full width and height */
 .center {
     width: 100%;
     height: 100%;
 }
 
+/* Main content area - 70% of viewport width */
 .main {
     width: 70dvw;
 }

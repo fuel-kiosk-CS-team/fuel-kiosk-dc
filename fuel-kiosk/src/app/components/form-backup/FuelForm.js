@@ -9,6 +9,7 @@ import {DateInput} from "@mantine/dates"
 // input form should just leave the date/datetime to server once it's submitted.
 
 const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
+  // State for form editability and data
   const [editable, setEditable] = useState(false);
   const [formData, setFormData] = useState({
     dateTime: new Date().toISOString().split('T')[0],
@@ -25,9 +26,11 @@ const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
     projectOrUnit: 'Recommended',
   });
 
+  // Available options for dropdowns
   const fuelTypeOptions = ['UNL', 'DSL', 'DSL OFF ROAD', 'CLEAR GAS'];
   const expCategoryOptions = ['Category 1', 'Category 2', 'Category 3']; // Add actual categories as needed.
 
+  // Handle form field changes
   const handleChange = (key, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -35,6 +38,7 @@ const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = () => {
     if (onSubmit) onSubmit(formData);
   };
@@ -44,6 +48,7 @@ const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
       <Title order={3} mb="md">Fuel Entry Form</Title>
       <form>
         <Group direction="column" spacing="md">
+          {/* Date and time fields */}
           <TextInput
             label="Date & Time"
             value={formData.dateTime}
@@ -54,6 +59,8 @@ const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
             value={new Date(formData.date)}
             onChange={(value) => handleChange('date', value.toISOString().split('T')[0])}
           />
+
+          {/* Totalizer controls */}
           <NumberInput
             label="Totalizer Start"
             value={formData.totalizerStart}
@@ -65,6 +72,8 @@ const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
             checked={editable}
             onChange={(event) => setEditable(event.currentTarget.checked)}
           />
+
+          {/* Site and fuel selection */}
           <Select
             label="Fuel Site"
             data={fuelSites || []}
@@ -79,6 +88,8 @@ const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
             value={formData.fuelType}
             onChange={(value) => handleChange('fuelType', value)}
           />
+
+          {/* Equipment and user information */}
           <TextInput
             label="EQ License or Description"
             placeholder="Enter EQ License or Description"
@@ -91,6 +102,8 @@ const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
             value={formData.name}
             onChange={(event) => handleChange('name', event.currentTarget.value)}
           />
+
+          {/* Measurement inputs */}
           <NumberInput
             label="Odometer"
             placeholder="Enter odometer value"
@@ -111,6 +124,8 @@ const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
             precision={1}
             onChange={(value) => handleChange('totalizerEnd', value)}
           />
+
+          {/* Category and project information */}
           <Select
             label="EXP. Category"
             data={expCategoryOptions}
@@ -125,6 +140,8 @@ const FuelForm = ({ previousMax, fuelSites, onSubmit }) => {
             value={formData.projectOrUnit}
             onChange={(event) => handleChange('projectOrUnit', event.currentTarget.value)}
           />
+
+          {/* Submit button */}
           <Button type="button" onClick={handleSubmit}>
             Submit
           </Button>

@@ -5,7 +5,9 @@ import React from 'react';
 import { Stack, Group, Button, Center } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 
+// Component for selecting fuel type and managing site-related actions
 export function FuelTypeSelector({ site, onSelect }) {
+    // Available fuel type options
     const fuelTypes = [
         { id: 'UNL', label: 'UNL' },
         { id: 'DSL', label: 'DSL' },
@@ -15,9 +17,10 @@ export function FuelTypeSelector({ site, onSelect }) {
 
     const router = useRouter();
 
+    // Handle user logout with final heartbeat
     const logout = async () => {
         try {
-            // send final heartbeat
+            // Send final heartbeat before logout
             await fetch('api/heartbeat')
 
             const response = await fetch('/api/auth/logout');
@@ -33,6 +36,7 @@ export function FuelTypeSelector({ site, onSelect }) {
 
     return (
         <Stack>
+            {/* Fuel type selection buttons */}
             <Group position="center" spacing="sm">
                 {fuelTypes.map((type) => (
                     <Button
@@ -44,8 +48,10 @@ export function FuelTypeSelector({ site, onSelect }) {
                     </Button>
                 ))}
             </Group>
+            {/* Navigation and action buttons */}
             <Button onClick={() => router.push(`/transactions?loc_code=${site}`)}>View Transaction Records</Button>
             <Button onClick={logout}>Logout</Button>
+            {/* Logout warning message */}
             <Center>
                 <p>NOTE: Only logout if you are switching sites.</p>
             </Center>

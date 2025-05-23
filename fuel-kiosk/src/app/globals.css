@@ -1,8 +1,10 @@
+/* CSS variables for light theme */
 :root {
     --background: #ffffff;
     --foreground: #171717;
 }
 
+/* Dark theme colors when system preference is dark mode */
 @media (prefers-color-scheme: dark) {
     :root {
         --background: #0a0a0a;
@@ -10,6 +12,7 @@
     }
 }
 
+/* Base body styles using theme variables */
 body {
     color: var(--foreground);
     background: var(--background);
