@@ -1,14 +1,7 @@
-function create() {}
+import { openDB } from 'idb';
 
-function input() {}
-
-function remove() {}
-
-function query() {}
-
-module.exports = {
-    create,
-    input,
-    remove,
-    query
-}
+const dbPromise = openDB('fuel-db', 1, {
+  upgrade(db) {
+    db.createObjectStore('transactions', { keyPath: 'id' });
+  }
+});
